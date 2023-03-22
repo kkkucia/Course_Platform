@@ -1,4 +1,11 @@
-# Platforma do obsługi kursów
+# Course management platform.
+
+Project for Databases course 2022/23 at AGH UST
+
+## Technologies
+- Oracle Database
+- Java
+
 
 ## Authors
 
