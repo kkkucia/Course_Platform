@@ -16,8 +16,8 @@ public class Connector {
     private Connector() {
         this.createdConnection = null;
         this.URL = "jdbc:oracle:thin:@dbmanage.lab.ii.agh.edu.pl:1521:DBMANAGE";
-        this.LOGIN = "BD_412814";
-        this.PASSWORD = "nowe_haslo";
+        this.LOGIN = "";
+        this.PASSWORD = "";
     }
 
     public static Connection getConnection() throws ClassNotFoundException, SQLException {
