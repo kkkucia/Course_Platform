@@ -15,12 +15,13 @@ public class Log implements DbElement {
     @ManyToOne
     @JoinColumn(name = "RESERVATION_FK")
     private Reservation reservation;
-    private Date log_date;
+    @Column(name = "log_date")
+    private Date logDate;
     private ReservationStatus status;
 
     public Log(Reservation reservation, ReservationStatus status) {
         this.reservation = reservation;
-        this.log_date = new Date();
+        this.logDate = new Date();
         this.status = status;
     }
 
@@ -32,7 +33,7 @@ public class Log implements DbElement {
         return "Log{" +
                 "id=" + id +
                 ", reservation=" + reservation.getCourse().getTitle()+" "+reservation.getStatus() +
-                ", log_date=" + log_date +
+                ", logDate=" + logDate +
                 ", status=" + status +
                 '}';
     }

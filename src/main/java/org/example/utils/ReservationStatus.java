@@ -1,7 +1,7 @@
 package org.example.utils;
 
 public enum ReservationStatus {
-    ACCEPTED,
-    REJECTED,
-    PENDING
+    PAID, //0
+    REJECTED, //1
+    NEW //2
 }

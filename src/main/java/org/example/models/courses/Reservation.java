@@ -38,6 +38,10 @@ public class Reservation implements DbElement {
         return status;
     }
 
+    public long getId() {
+        return id;
+    }
+
     @Override
     public String toString() {
         return "Reservation{" +

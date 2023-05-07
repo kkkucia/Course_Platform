@@ -17,15 +17,19 @@ public class Course implements DbElement {
     private long id;
     private String title;
     private BigDecimal price;
+    @Column(name = "start_date")
     private Date startDate;
+    @Column(name = "end_date")
     private Date endDate;
+    @Column(name = "max_no_places")
     private int maxNoPlaces;
+    @Column(name = "available_places")
     private int availablePlaces;
     @ManyToOne
     @JoinColumn(name="CATEGORY_FK")
     private Category category;
-    @ManyToMany(mappedBy = "courses")
-    private Set<Mentor> mentors;
+//    @ManyToMany(mappedBy = "courses")
+//    private Set<Mentor> mentors;
     public Course(String title, BigDecimal price, Date startDate, Date endDate, int maxNoPlaces, int availablePlaces) {
         this.title = title;
         this.price = price;
@@ -33,7 +37,7 @@ public class Course implements DbElement {
         this.endDate = endDate;
         this.maxNoPlaces = maxNoPlaces;
         this.availablePlaces = availablePlaces;
-        this.mentors = new HashSet<>();
+//        this.mentors = new HashSet<>();
     }
 
     public Course() {
@@ -54,7 +58,7 @@ public class Course implements DbElement {
                 ", maxNoPlaces=" + maxNoPlaces +
                 ", availablePlaces=" + availablePlaces +
                 ", category= "+ category.getCategoryName() +
-                ", mentors= " + mentors.stream().map(Mentor::toString).collect(Collectors.joining(", ")) +
+//                ", mentors= " + mentors.stream().map(Mentor::toString).collect(Collectors.joining(", ")) +
                 '}';
     }
 }

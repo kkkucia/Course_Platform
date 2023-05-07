@@ -2,16 +2,14 @@ package org.example.models.courses;
 
 import org.example.utils.DbElement;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Category implements DbElement {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+    @Column(name = "category_name")
     private String categoryName;
     private String description;
 
