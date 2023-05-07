@@ -11,8 +11,6 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
                       value="oracle.jdbc.OracleDriver"/>
             <property name="hibernate.connection.url"
                       value="jdbc:oracle:thin:@dbmanage.lab.ii.agh.edu.pl:1521:DBMANAGE"/>
-            <property name="hibernate.connection.username" value="BD_412814"/>
-            <property name="hibernate.connection.password" value="nowe_haslo"/>
             <property name="hibernate.show_sql" value="true" />
             <property name="hibernate.format_sql" value="true" />
             <property name="hibernate.hbm2ddl.auto" value="create" />
