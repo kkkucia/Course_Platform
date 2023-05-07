@@ -5,9 +5,8 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 public class DBActions {
-
-    private Session session;
-    private Transaction tx;
+    private final Session session;
+    private final Transaction tx;
 
     public DBActions(Session session) {
         this.session = session;

@@ -20,7 +20,6 @@
 *.rar
 
 # Maven artifacts
-pom.xml
 /target/
 
 # IDEA artifacts and output dirs
