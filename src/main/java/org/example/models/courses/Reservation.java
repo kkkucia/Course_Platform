@@ -5,9 +5,7 @@ import org.example.utils.DbElement;
 import org.example.utils.ReservationStatus;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Collectors;
+
 
 @Entity
 public class Reservation implements DbElement {
@@ -15,8 +13,10 @@ public class Reservation implements DbElement {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private ReservationStatus status;
-    @ManyToMany(mappedBy = "reservations")
-    private Set<Participant> participants;
+
+    @ManyToOne
+    @JoinColumn(name = "PARTICIPANT_FK")
+    private Participant participant;
     @ManyToOne
     @JoinColumn(name = "COURSE_FK")
     private Course course;
@@ -24,9 +24,9 @@ public class Reservation implements DbElement {
     public Reservation() {
     }
 
-    public Reservation(ReservationStatus status, Course course) {
+    public Reservation(ReservationStatus status, Course course, Participant participant) {
         this.status = status;
-        this.participants = new HashSet<>();
+        this.participant = participant;
         this.course = course;
     }
 
@@ -38,6 +38,10 @@ public class Reservation implements DbElement {
         return status;
     }
 
+    public Participant getParticipant() {
+        return participant;
+    }
+
     public long getId() {
         return id;
     }
@@ -47,10 +51,8 @@ public class Reservation implements DbElement {
         return "Reservation{" +
                 "id=" + id +
                 ", status=" + status +
-                ", participants=" + participants.stream()
-                .map(participant -> participant.getFirstName() + " " + participant.getLastName())
-                .collect(Collectors.joining(", ")) +
-                ", course=" + course.getTitle() +
+                ", participant=" + participant.getFirstName() + " " + participant.getLastName() +
+                ", course=" + course.getTitle() + '\'' +
                 '}';
     }
 }

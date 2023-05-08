@@ -4,6 +4,9 @@ import org.example.utils.DbElement;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Invoice implements DbElement {
@@ -13,13 +16,15 @@ public class Invoice implements DbElement {
     @Column(name = "transaction_date")
     private Date transactionDate;
     private String type;
-    @ManyToOne
-    @JoinColumn(name="CONNECTED_RESERVATION_FK")
-    private Reservation reservation;
+
+    @OneToMany
+    @JoinColumn(name = "CONNECTED_RESERVATION_FK")
+    private Set<Reservation> reservations;
 
     public Invoice(Date date, String type) {
         this.transactionDate = date;
         this.type = type;
+        this.reservations = new HashSet<>();
     }
 
     public Invoice() {
@@ -30,8 +35,8 @@ public class Invoice implements DbElement {
         return "Invoice{" +
                 "id=" + id +
                 ", date=" + transactionDate +
-                ", type='" + type + '\'' +
-//                ", reservationId=" + reservation.getId() +
+                ", type='" + type +
+                ", reservations= " + reservations.stream().map(Reservation::toString).collect((Collectors.joining(", "))) + '\'' +
                 '}';
     }
 }

@@ -32,7 +32,7 @@ public class Log implements DbElement {
     public String toString() {
         return "Log{" +
                 "id=" + id +
-                ", reservation=" + reservation.getCourse().getTitle()+" "+reservation.getStatus() +
+                ", reservation=" + reservation.getCourse().getTitle() + " " + reservation.getStatus() +
                 ", logDate=" + logDate +
                 ", status=" + status +
                 '}';

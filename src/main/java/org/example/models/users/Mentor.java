@@ -6,6 +6,7 @@ import org.example.utils.DbElement;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 public class Mentor extends User implements DbElement {
@@ -28,6 +29,7 @@ public class Mentor extends User implements DbElement {
                 ", lastName='" + getLastName() + '\'' +
                 ", phoneNumber='" + getPhoneNumber() + '\'' +
                 ", email='" + getEmail() + '\'' +
+ //               ", courses= " + courses.stream().map(Course::toString).collect(Collectors.joining(", ")) + '\'' +
                 '}';
     }
 }

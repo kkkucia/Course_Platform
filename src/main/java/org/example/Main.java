@@ -36,6 +36,7 @@ public class Main {
     public static void main(String[] args) {
         final Session session = getSession();
         try {
+
         } finally {
             session.close();
         }
