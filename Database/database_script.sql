@@ -16,6 +16,7 @@ from course c
 where c.AVAILABLE_PLACES > 0
   and c.START_DATE > current_date;
 
+
 --widok kategorii kursów
 create or replace view categories_view
 as
@@ -23,6 +24,7 @@ select c.ID,
        c.CATEGORY_NAME,
        c.DESCRIPTION
 from category c;
+
 
 --widok wszystkich kursów
 create or replace view courses_view
@@ -44,8 +46,13 @@ create or replace view invoices_view
 as
 select i.ID,
        i.ALLPRICE,
-       i.TRANSACTION_DATE
-from invoice i;
+       i.TRANSACTION_DATE,
+       p.FIRST_NAME,
+       p.LAST_NAME
+from invoice i
+         inner join RESERVATION r on i.ID = r.CONNECTED_RESERVATION_FK
+         inner join PARTICIPANT P on P.ID = r.PARTICIPANT_FK;
+
 
 --widok wszystkich rezerwacji
 create or replace view reservation_view
@@ -75,6 +82,7 @@ from reservation r
          inner join course c on r.COURSE_FK = c.ID
 where STATUS = 1;
 
+
 --widok wszystkich uczestników:
 create or replace view participant_view
 as
@@ -103,6 +111,7 @@ create or replace type course_details as OBJECT
 
 create or replace type course_details_table is table of course_details;
 
+
 -- informacje o rezerwacji
 create or replace type reservation_details as OBJECT
 (
@@ -117,6 +126,7 @@ create or replace type reservation_details as OBJECT
 
 create or replace type reservation_details_table is table of reservation_details;
 
+
 -- informacje o użytkowniku
 create or replace type user_details as OBJECT
 (
@@ -128,6 +138,7 @@ create or replace type user_details as OBJECT
 );
 
 create or replace type user_details_table is table of user_details;
+
 
 -- informacje o fakturze
 create or replace type invoice_details as OBJECT
@@ -222,6 +233,7 @@ begin
     return result;
 end;
 
+
 -- lista kursów dla kategorii (dostępnych w konkretnych terminach i te które mają dostępne miejsca)
 create or replace function f_available_courses_by_category_on_time(
     start_date_course date,
@@ -251,6 +263,7 @@ begin
     return result;
 end;
 
+
 -- dla danego kursu pokaż rezerwacje
 create or replace function f_reservations_from_course(course_id COURSE.ID%type)
     return reservation_details_table
@@ -274,6 +287,7 @@ begin
 
     return result;
 end;
+
 
 -- dla danego klienta pokaż wszystkie rezerwacje
 create or replace function f_reservations_for_participant(participant_id PARTICIPANT.ID%type)
@@ -299,6 +313,7 @@ begin
     return result;
 end;
 
+
 -- dla danego klienta pokaż nieopłacone rezerwacje
 create or replace function f_unpaid_reservations_for_participant(participant_id PARTICIPANT.ID%type)
     return reservation_details_table
@@ -319,10 +334,11 @@ begin
              inner join course c on c.id = r.COURSE_FK
              inner join participant p on p.id = r.PARTICIPANT_FK
     where p.id = participant_id
-      and (r.status = 1 or r.status = 2);
+      and r.status = 2; --NEW
 
     return result;
 end;
+
 
 -- podaj klientów/ kontakt do wszystkich klientów danego kursu
 create or replace function f_participants_from_course(course_id COURSE.ID%type)
@@ -346,6 +362,7 @@ begin
     return result;
 end;
 
+
 -- podaj kontakt do mentora/ mentorów danego kursu
 create or replace function f_mentors_from_course(course_id COURSE.ID%type)
     return user_details_table
@@ -368,6 +385,7 @@ begin
     return result;
 end;
 
+
 -- pokaż faktury danego klienta
 create or replace function f_invoices_for_participant(participant_id PARTICIPANT.ID%type)
     return invoice_details_table
@@ -388,4 +406,290 @@ begin
     return result;
 end;
 
+
+-- daj sume nieopłaconych rezerwacji dla danego klienta
+create or replace function f_amount_to_pay_for_participant(participant_id PARTICIPANT.ID%type)
+    return INVOICE.ALLPRICE%TYPE
+as
+    total_amount INVOICE.ALLPRICE%TYPE := 0;
+begin
+    participant_exist(participant_id);
+
+    select sum(c.price)
+    into total_amount
+
+    from reservation r
+             inner join course c on c.id = r.COURSE_FK
+    where r.PARTICIPANT_FK = participant_id
+      and r.status = 2 --NEW
+    group by r.PARTICIPANT_FK;
+
+    return total_amount;
+end;
+
+
+-- TRIGGERY
+
+--zabronione usuwanie rezerwacji
+create or replace trigger tr_forbidden_remove_reservation
+    before delete
+    on RESERVATION
+    for each row
+begin
+    raise_application_error(-20001, 'ERROR: Removing reservations is forbidden.');
+end;
+
+
+--zabronione robienie rezerwacji na nieistniejący kurs, przez nieistniejącego klienta i robienie rezerwacji w przeszłości
+create or replace trigger tr_forbidden_make_reservation
+    before insert
+    on RESERVATION
+    for each row
+declare
+    start_date_course COURSE.start_date%type;
+begin
+    course_exist(:new.COURSE_FK);
+    participant_exist(:new.PARTICIPANT_FK);
+
+    select c.start_date
+    into start_date_course
+    from COURSE c
+    where c.ID = :new.COURSE_FK;
+
+    if start_date_course < current_date then
+        raise_application_error(-20001, 'ERROR: Reservation for this course is not available.');
+    end if;
+end;
+
+
+-- zmiana miejsc na kursie  (po zmianie statusu w rezerwacji)
+create or replace trigger tr_change_places_reservation
+    before insert or update of STATUS
+    on RESERVATION
+    for each row
+declare
+    available_places_course COURSE.AVAILABLE_PLACES%type;
+    places                  COURSE.AVAILABLE_PLACES%type;
+
+begin
+    select c.AVAILABLE_PLACES
+    into available_places_course
+    from COURSE c
+    where c.ID = :new.COURSE_FK;
+
+    if available_places_course <= 0 and :new.status = 2 then
+        raise_application_error(-20001, 'ERROR: Course is fully booked');
+    end if;
+
+    if :new.status = 1 --REJECTED
+    then
+        places := 1;
+    elsif :new.status = 2 --NEW
+    then
+        places := -1;
+    else --PAID
+        places := 0;
+    end if;
+
+    update COURSE c
+    set c.AVAILABLE_PLACES = available_places_course + places
+    where :new.COURSE_FK = c.ID;
+
+--    add_log_reservation(:new.status, :new.id); -- aktualizacja log  (po zmianie statusu w rezerwacji)
+end;
+
+
+-- aktualizacja liczby dostępnych miejsc na kursie  (po zmianie maksymalnej liczby miejsc)
+
+--funkcja potrzebna triggerowi do zmainy available_places
+create or replace function f_update_available_places(new_max_places COURSE.MAX_NO_PLACES%type,
+                                                     old_max_places COURSE.MAX_NO_PLACES%type,
+                                                     p_old_available_places COURSE.AVAILABLE_PLACES%type)
+    return COURSE.AVAILABLE_PLACES%type
+    is
+    new_available_places COURSE.AVAILABLE_PLACES%type;
+begin
+    if new_max_places < 0 then
+        raise_application_error(-20001, 'ERROR: Number of places cannot be less than zero.');
+    end if;
+
+    new_available_places := p_old_available_places + (new_max_places - old_max_places);
+
+    if new_available_places < 0 then
+        raise_application_error(-20001, 'ERROR: Number of available places cannot be less than zero.');
+    end if;
+
+    return new_available_places;
+end;
+
+
+--trigger wyłąpujący zmiane max_no_places
+create or replace trigger tr_modify_no_places
+    before update of max_no_places
+    on COURSE
+    for each row
+declare
+    new_available_places COURSE.AVAILABLE_PLACES%type;
+begin
+    new_available_places := f_update_available_places(:new.max_no_places, :old.max_no_places, :old.AVAILABLE_PLACES);
+
+    :new.AVAILABLE_PLACES := new_available_places;
+end;
+
+-- PROCEDURY
+
+-- dodaj log do tablicy log
+create or replace procedure add_log_reservation(
+    new_status RESERVATION.STATUS%type,
+    reservation_id RESERVATION.ID%type)
+as
+    log_id LOG.ID%type;
+begin
+    reservation_exist(reservation_id);
+
+    SELECT log_seq.NEXTVAL INTO log_id FROM dual;
+
+    insert into LOG (ID, log_date, status, reservation_fk)
+    values (log_id, current_date, new_status, reservation_id);
+
+    commit;
+exception
+    when others then
+        rollback;
+        raise;
+end;
+
+
+-- zarezerwuj miejsce na kursie dla danej osoby(stwórz rezerwacje)
+create or replace procedure make_reservation(
+    course_id course.id%type,
+    participant_id participant.id%type
+)
+as
+    reservation_id reservation.id%type;
+begin
+    course_exist(course_id);
+    participant_exist(participant_id);
+
+    SELECT reservation_seq.NEXTVAL INTO reservation_id FROM dual;
+
+    insert into reservation (ID, STATUS, COURSE_FK, PARTICIPANT_FK)
+    values (reservation_id, 2, course_id, participant_id);
+
+    commit;
+exception
+    when others then
+        rollback;
+        raise;
+end;
+
+
+-- zapłać za konkretną rezerwacje (stworzy fakture dla pojedyńczej rezerwacji)
+CREATE OR REPLACE PROCEDURE pay_for_reservation(reservation_id IN RESERVATION.ID%TYPE, payment_type INVOICE.TYPE%type)
+AS
+    course_price       COURSE.PRICE%TYPE;
+    invoice_id         INVOICE.ID%TYPE;
+    reservation_status RESERVATION.STATUS%TYPE;
+BEGIN
+    reservation_exist(reservation_id);
+
+    SELECT c.PRICE, r.STATUS
+    INTO course_price, reservation_status
+    FROM RESERVATION r
+             INNER JOIN COURSE c on c.ID = r.COURSE_FK
+    WHERE r.ID = reservation_id;
+
+    if reservation_status != 2 then
+        raise_application_error(-20001, 'ERROR: This reservation was already paid.');
+    end if;
+
+    SELECT invoice_seq.NEXTVAL INTO invoice_id FROM dual;
+
+    INSERT INTO INVOICE (ID, ALLPRICE, TRANSACTION_DATE, "TYPE")
+    VALUES (invoice_id, course_price, current_date, payment_type);
+
+    update RESERVATION r
+    set r.STATUS = 0 --PAID
+    where reservation_id = r.ID;
+
+    COMMIT;
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        raise;
+END;
+
+
+-- zapłać za wszystkie nieopłacone kursy dla danego klienta(stwórz fakture)
+CREATE OR REPLACE PROCEDURE pay_for_all_unpaid_reservations(participant_id PARTICIPANT.ID%TYPE,
+                                                            payment_type INVOICE.TYPE%TYPE)
+AS
+    reservation_id RESERVATION.ID%TYPE;
+    invoice_price  INVOICE.ALLPRICE%TYPE;
+    invoice_id     INVOICE.ID%TYPE;
+BEGIN
+
+    invoice_price := f_amount_to_pay_for_participant(participant_id);
+
+    FOR rec IN (SELECT r.ID, c.PRICE
+                FROM RESERVATION r
+                         INNER JOIN COURSE c ON c.ID = r.COURSE_FK
+                WHERE r.STATUS = 1
+                  AND r.PARTICIPANT_FK = participant_id)
+        LOOP
+            reservation_id := rec.ID;
+
+            pay_for_reservation(reservation_id, payment_type);
+
+            UPDATE RESERVATION r
+            SET r.STATUS = 0
+            WHERE r.ID = reservation_id;
+
+        END LOOP;
+
+    SELECT invoice_seq.NEXTVAL INTO invoice_id FROM dual;
+
+    INSERT INTO INVOICE (ID, ALLPRICE, TRANSACTION_DATE, "TYPE")
+    VALUES (invoice_id, invoice_price, current_date, payment_type);
+
+    COMMIT;
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        RAISE;
+END;
+
+
+-- dodaj mentora do danego kursu
+create or replace procedure add_mentor_to_course(
+    add_course_id course.id%type,
+    add_mentor_id mentor.id%type
+)
+as
+begin
+    course_exist(add_course_id);
+    mentor_exist(add_mentor_id);
+
+    insert into MENTOR_COURSE(mentors_id, courses_id)
+    values (add_mentor_id, add_course_id);
+    commit;
+exception
+    when others then
+        rollback;
+        raise;
+end;
+
+
+-- sekwencje
+CREATE SEQUENCE reservation_seq
+    START WITH 1
+    INCREMENT BY 1;
+
+CREATE SEQUENCE invoice_seq
+    START WITH 1
+    INCREMENT BY 1;
+
+CREATE SEQUENCE log_seq
+    START WITH 1
+    INCREMENT BY 1;
 

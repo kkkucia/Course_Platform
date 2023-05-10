@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Entity
 public class Invoice implements DbElement {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     @Column(name = "transaction_date")
     private Date transactionDate;
@@ -27,7 +27,7 @@ public class Invoice implements DbElement {
         this.transactionDate = date;
         this.type = type;
         this.allPrice = allPrice;
-        this.reservations = new HashSet<>();
+//        this.reservations = new HashSet<>();
     }
 
     public Invoice() {
@@ -40,7 +40,7 @@ public class Invoice implements DbElement {
                 ", date=" + transactionDate +
                 ", type='" + type +
                 ", allPrice='" + allPrice.toString() +
-                ", reservations= " + reservations.stream().map(Reservation::toString).collect((Collectors.joining(", "))) + '\'' +
+//                ", reservations= " + reservations.stream().map(Reservation::toString).collect((Collectors.joining(", "))) + '\'' +
                 '}';
     }
 }

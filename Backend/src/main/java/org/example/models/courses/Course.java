@@ -31,14 +31,15 @@ public class Course implements DbElement {
     @ManyToMany(mappedBy = "courses")
     private Set<Mentor> mentors;
 
-    public Course(String title, BigDecimal price, Date startDate, Date endDate, int maxNoPlaces, int availablePlaces) {
+    public Course(String title, BigDecimal price, Date startDate, Date endDate, int maxNoPlaces, int availablePlaces, Category category) {
         this.title = title;
         this.price = price;
         this.startDate = startDate;
         this.endDate = endDate;
         this.maxNoPlaces = maxNoPlaces;
         this.availablePlaces = availablePlaces;
-        this.mentors = new HashSet<>();
+        this.category = category;
+//      this.mentors = new HashSet<>();
     }
 
     public Course() {
@@ -59,7 +60,7 @@ public class Course implements DbElement {
                 ", maxNoPlaces=" + maxNoPlaces +
                 ", availablePlaces=" + availablePlaces +
                 ", category= " + category.getCategoryName() +
-                ", mentors= " + mentors.stream().map(Mentor::toString).collect(Collectors.joining(", ")) + '\'' +
+//                ", mentors= " + mentors.stream().map(Mentor::toString).collect(Collectors.joining(", ")) + '\'' +
                 '}';
     }
 }
