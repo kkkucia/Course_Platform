@@ -25,6 +25,7 @@ public class Category implements DbElement {
         return categoryName;
     }
 
+
     @Override
     public String toString() {
         return "Category{" +

@@ -10,7 +10,7 @@ import java.util.Date;
 @Entity
 public class Log implements DbElement {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     @ManyToOne
     @JoinColumn(name = "RESERVATION_FK")
