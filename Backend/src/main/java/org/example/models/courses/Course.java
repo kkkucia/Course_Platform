@@ -1,11 +1,14 @@
 package org.example.models.courses;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.example.models.users.Mentor;
 import org.example.utils.DbElement;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -16,6 +19,7 @@ public class Course implements DbElement {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String title;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal price;
     @Column(name = "start_date")
     private Date startDate;
@@ -47,6 +51,21 @@ public class Course implements DbElement {
 
     public String getTitle() {
         return title;
+    }
+
+    public Date getStartDate() {
+        long timestamp = startDate.getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        System.out.println(dateFormat.format(timestamp));
+        try {
+            return new java.sql.Date(dateFormat.parse(dateFormat.format(timestamp)).getTime());
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Date getEndDate() {
+        return endDate;
     }
 
     @Override
