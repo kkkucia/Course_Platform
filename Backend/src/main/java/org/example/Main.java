@@ -11,38 +11,16 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+import org.example.connection.DBConnection;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import java.math.BigDecimal;
-import java.sql.Date;
 
+@SpringBootApplication
 public class Main {
-    private static final SessionFactory ourSessionFactory;
-
-    static {
-        try {
-            Configuration configuration = new Configuration();
-            configuration.configure();
-
-            ourSessionFactory = configuration.buildSessionFactory();
-        } catch (Throwable ex) {
-            throw new ExceptionInInitializerError(ex);
-        }
-    }
-
-    public static Session getSession() throws HibernateException {
-        return ourSessionFactory.openSession();
-    }
-
     public static void main(String[] args) {
-        final Session session = getSession();
-        try {
-            Transaction tx = session.beginTransaction();
-
 //            Category category1 = new Category("Programowanie","Kurs programowania składa się z teoretycznych wykładów oraz praktycznych ćwiczeń, podczas których uczestnicy piszą własny kod i rozwiązują zadania programistyczne." );
-//            Category category2 = new Category("Historia", "Uczestnicy poznają kluczowe wydarzenia i postaci z przeszłości oraz nauczą się analizować historyczne źródła i interpretować fakty. ");
+//            Category category2 = new Category"Historia", "Uczestnicy poznają kluczowe wydarzenia i postaci z przeszłości oraz nauczą się analizować historyczne źródła i interpretować fakty. ");
 //            Category category3 = new Category("Geografia", "Uczestnicy poznają różne aspekty geografii, takie jak geografia fizyczna, polityczna czy ekonomiczna. Nauczą się rónież korzystać z narzędzi geograficznych i technologii, takich jak systemy informacji geograficznej.");
 //
 //            session.save(category1);
@@ -114,14 +92,12 @@ public class Main {
 //            session.save(participant8);
 //            session.save(participant9);
 //            session.save(participant10);
-
-            tx.commit();
-        } finally {
-            session.close();
-        }
-//        EntityManagerFactory emf = Persistence.
-//                createEntityManagerFactory("myDatabaseConfig");
-//        EntityManager em = emf.createEntityManager();
-//        em.close();
+        SpringApplication.run(Main.class, args);
+        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+            public void run() {
+                DBConnection.getSession().close();
+                System.out.println("Session closed");
+            }
+        }, "Close session"));
     }
 }
