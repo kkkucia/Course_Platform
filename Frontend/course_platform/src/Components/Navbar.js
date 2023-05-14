@@ -8,8 +8,8 @@ const Navbar = () => {
   return (
     <>
       <nav >
-          {/* <Link to="/" >
-          </Link> */}
+          <Link to="/" >Home</Link>
+          <Link to="/courses" >Course list</Link>
 
           {/* <OneLink route="/coś tam" label="" /> */}
          
