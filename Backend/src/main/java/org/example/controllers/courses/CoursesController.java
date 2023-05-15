@@ -20,6 +20,7 @@ public class CoursesController extends MainController {
         return session.createSQLQuery("SELECT * FROM AVAILABLE_COURSES_VIEW").stream().toArray();
     }
 
+    @CrossOrigin
     @GetMapping("/courses/{courseName}")
     public List<Course> getCourse(@PathVariable("courseName") String courseName) {
         Object[] queryResult = session.createQuery("from Course c where c.title=:courseName")
@@ -33,6 +34,7 @@ public class CoursesController extends MainController {
         return courses;
     }
 
+    @CrossOrigin
     @GetMapping("/courses")
     public List<Course> getCourses() {
         Object[] queryResult = session.createQuery("from Course").stream().toArray();
