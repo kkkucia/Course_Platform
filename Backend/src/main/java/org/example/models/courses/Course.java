@@ -68,6 +68,7 @@ public class Course implements DbElement {
         return endDate;
     }
 
+
     @Override
     public String toString() {
         return "Course{" +

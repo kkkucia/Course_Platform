@@ -21,11 +21,6 @@ public class UsersController extends MainController {
         return session.createQuery("from Course").stream().toArray();
     }
 
-    @GetMapping("/participants/{courseName}")
-    public Object[] getCourse(@PathVariable("courseName") String courseName) {
-        return session.createQuery("from Course c where c.title=:courseName")
-                .setParameter("courseName", courseName).stream().toArray();
-    }
 
     @PostMapping("/participants")
     public ResponseEntity addCourse(@RequestBody Course course) {
