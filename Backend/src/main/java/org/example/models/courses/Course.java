@@ -9,9 +9,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 public class Course implements DbElement {

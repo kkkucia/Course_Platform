@@ -2,11 +2,10 @@ package org.example.controllers.courses;
 
 import org.example.controllers.MainController;
 import org.hibernate.Transaction;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.example.models.courses.Course;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,5 +44,16 @@ public class CoursesController extends MainController {
             courses.add(tmpCourse);
         }
         return courses;
+    }
+
+    @CrossOrigin
+    @PostMapping("/courses")
+    public ResponseEntity addCourse(@RequestBody Course course) {
+        System.out.println(course.getStartDate());
+        System.out.println(course.getEndDate());
+        Transaction tx = session.beginTransaction();
+        session.save(course);
+        tx.commit();
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 }
