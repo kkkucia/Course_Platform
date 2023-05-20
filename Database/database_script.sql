@@ -521,43 +521,37 @@ end;
 
 
 -- zmiana miejsc na kursie  (po zmianie statusu w rezerwacji)
-create
-or replace trigger tr_change_places_reservation
-    before insert or
-update of STATUS
-on RESERVATION
+create or replace trigger TR_CHANGE_PLACES_RESERVATION
+    before insert or update of STATUS
+    on RESERVATION
     for each row
 declare
-available_places_course COURSE.AVAILABLE_PLACES%type;
-    places
-COURSE.AVAILABLE_PLACES%type;
+    available_places_course COURSE.AVAILABLE_PLACES%type;
+    places                  COURSE.AVAILABLE_PLACES%type;
 
 begin
-select c.AVAILABLE_PLACES
-into available_places_course
-from COURSE c
-where c.ID = :new.COURSE_FK;
+    select c.AVAILABLE_PLACES
+    into available_places_course
+    from COURSE c
+    where c.ID = :new.COURSE_FK;
 
-if
-available_places_course <= 0 and :new.status = 2 then
+    if available_places_course <= 0 and :new.status = 2 then
         raise_application_error(-20001, 'ERROR: Course is fully booked');
-end if;
+    end if;
 
-    if
-:new.status = 1 --REJECTED
+    if :new.status = 1 --REJECTED
     then
         places := 1;
-    elsif
-:new.status = 2 --NEW
+    elsif :new.status = 2 --NEW
     then
         places := -1;
-else --PAID
+    else --PAID
         places := 0;
-end if;
+    end if;
 
-update COURSE c
-set c.AVAILABLE_PLACES = available_places_course + places
-where :new.COURSE_FK = c.ID;
+    update COURSE c
+    set c.AVAILABLE_PLACES = available_places_course + places
+    where :new.COURSE_FK = c.ID;
 end;
 
 
@@ -750,6 +744,35 @@ EXCEPTION
     WHEN OTHERS THEN
         ROLLBACK;
         RAISE;
+END;
+
+--Odrzuć daną prezentacje  (ustawia status rezerwacji na anulowany)
+create or replace PROCEDURE cancel_reservation(reservation_id IN RESERVATION.ID%TYPE)
+AS
+    reservation_status RESERVATION.STATUS%TYPE;
+BEGIN
+    reservation_exist(reservation_id);
+
+    SELECT r.STATUS
+    INTO reservation_status
+    FROM RESERVATION r
+    WHERE r.ID = reservation_id;
+
+    if reservation_status != 2 then
+        raise_application_error(-20001, 'ERROR: This reservation was already paid or canceled.');
+    end if;
+
+    update RESERVATION r
+    set r.STATUS = 1 --REJECTED
+    where reservation_id = r.ID;
+
+    ADD_LOG_RESERVATION(1, reservation_id);
+
+    COMMIT;
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        raise;
 END;
 
 
