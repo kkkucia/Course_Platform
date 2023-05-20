@@ -18,7 +18,7 @@
         <mapping class="org.example.models.courses.Reservation"/>
         <mapping class="org.example.models.courses.Category"/>
         <mapping class="org.example.models.courses.Invoice"/>
-        <mapping class="org.example.models.others.Log"/>
+        <mapping class="org.example.models.others.Log_table"/>
         <mapping class="org.example.models.users.User"/>
         <mapping class="org.example.models.users.Mentor"/>
         <mapping class="org.example.models.users.Participant"/>
