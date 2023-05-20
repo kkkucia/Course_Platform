@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class Log implements DbElement {
+public class Log_table implements DbElement {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
@@ -19,13 +19,13 @@ public class Log implements DbElement {
     private Date logDate;
     private ReservationStatus status;
 
-    public Log(Reservation reservation, ReservationStatus status) {
+    public Log_table(Reservation reservation, ReservationStatus status) {
         this.reservation = reservation;
         this.logDate = new Date();
         this.status = status;
     }
 
-    public Log() {
+    public Log_table() {
     }
 
     @Override
