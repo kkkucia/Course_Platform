@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.*;
 
@@ -42,7 +43,7 @@ public class CoursesController extends MainController {
         return returnPreparedAvailableCourses(query);
     }
 
-    private String returnPreparedAvailableCourses(Query query){
+    private String returnPreparedAvailableCourses(Query query) {
         List<AvailableCourse> availableCourses = new ArrayList<>();
         Object[] currObj;
         AvailableCourse availableCourse;
@@ -57,9 +58,20 @@ public class CoursesController extends MainController {
 
     @CrossOrigin
     @GetMapping("/courses/{courseName}")
-    public Course getCourse(@PathVariable("courseName") String courseName) {
+    public Course getCourseByName(@PathVariable("courseName") String courseName) {
         Optional queryResult = session.createQuery("from Course c where c.title=:courseName")
                 .setParameter("courseName", courseName).stream().findFirst();
+        if (queryResult.isPresent()) {
+            return (Course) queryResult.get();
+        }
+        return null;
+    }
+
+    @CrossOrigin
+    @GetMapping("/courses/id/{courseId}")
+    public Course getCourseById(@PathVariable("courseId") long courseId) {
+        Optional queryResult = session.createQuery("from Course c where c.id=:courseId")
+                .setParameter("courseId", courseId).stream().findFirst();
         if (queryResult.isPresent()) {
             return (Course) queryResult.get();
         }
