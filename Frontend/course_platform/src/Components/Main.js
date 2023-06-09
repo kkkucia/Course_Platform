@@ -1,9 +1,10 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import Navbar from "./Navbar";
 import Home from "./Home";
-import Courses from "./Courses";
+import AvailableCoursesList from "./AvailableCoursesList";
 
 import "../Styles/Main.css"
+import AddCourses from "./AddCourse";
 
 
 const Main = () => {
@@ -16,7 +17,8 @@ const Main = () => {
 {/* <Route path="/cos tam " element={<jakis tam komponent />} /> */}
 {/* <Route path="/" element={<Home />} /> */}
                 <Route path="/" element={<Home />} />
-                <Route path="/courses" element={<Courses />} />
+                <Route path="/courses/available" element={<AvailableCoursesList />} />
+                <Route path="/courses/add" element={<AddCourses />} />
                 <Route path="*" element={<Navigate to="/" />} />
             </Routes>
         </>
