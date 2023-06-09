@@ -2,8 +2,12 @@ package org.example.controllers.courses;
 
 import org.example.controllers.MainController;
 import org.example.models.courses.Course;
+import org.example.models.users.Mentor;
+import org.example.models.users.Participant;
 import org.example.models.views.AvailableCourse;
 import org.hibernate.Transaction;
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
+import org.hibernate.exception.GenericJDBCException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,14 +51,54 @@ public class CoursesController extends MainController {
         List<AvailableCourse> availableCourses = new ArrayList<>();
         Object[] currObj;
         AvailableCourse availableCourse;
-        for (Object result : query.getResultList()) {
-            currObj = (Object[]) result;
-            availableCourse = new AvailableCourse(currObj);
-            availableCourses.add(availableCourse);
+        try {
+            for (Object result : query.getResultList()) {
+                currObj = (Object[]) result;
+                availableCourse = new AvailableCourse(currObj);
+                availableCourses.add(availableCourse);
+            }
+        } catch (PersistenceException ignored) {
         }
         return gson.toJson(availableCourses);
     }
 
+    @CrossOrigin
+    @GetMapping("/courses/participants")
+    public String getParticipantsForCourse(@RequestBody Map<String, Integer> inputMap) {
+        Query query = session.createSQLQuery("SELECT * FROM f_participants_from_course(:course_id)")
+                .setParameter("course_id", inputMap.get("course_id"));
+        List<Participant> participants = new ArrayList<>();
+        Object[] currObj;
+        Participant participant;
+        try {
+            for (Object result : query.getResultList()) {
+                currObj = (Object[]) result;
+                participant = new Participant(currObj);
+                participants.add(participant);
+            }
+        } catch (PersistenceException ignored) {
+        }
+        return gson.toJson(participants);
+    }
+
+    @CrossOrigin
+    @GetMapping("/courses/mentors")
+    public String getMentorsForCourse(@RequestBody Map<String, Integer> inputMap) {
+        Query query = session.createSQLQuery("SELECT * FROM f_mentors_from_course(:course_id)")
+                .setParameter("course_id", inputMap.get("course_id"));
+        List<Mentor> mentors = new ArrayList<>();
+        Object[] currObj;
+        Mentor mentor;
+        try {
+            for (Object result : query.getResultList()) {
+                currObj = (Object[]) result;
+                mentor = new Mentor(currObj);
+                mentors.add(mentor);
+            }
+        } catch (PersistenceException ignored) {
+        }
+        return gson.toJson(mentors);
+    }
 
     @CrossOrigin
     @GetMapping("/courses/{courseName}")

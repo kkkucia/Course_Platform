@@ -25,6 +25,14 @@ public abstract class User implements DbElement {
         this.email = email;
     }
 
+    public User(long id, String firstName, String lastName, String phoneNumber, String email) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+    }
+
     public User() {
     }
 
