@@ -12,7 +12,7 @@ public class AvailableCourse {
 //       c.AVAILABLE_PLACES,
 //       c.MAX_NO_PLACES,
 //       c.PRICE
-    private BigDecimal id;
+    private final BigDecimal id;
     private String title;
     private String categoryName;
     private Timestamp startDate;

@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 public class InvoiceViewElement {
-    private BigDecimal id;
+    private final BigDecimal id;
     private BigDecimal allPrice;
     private Timestamp transactionDate;
     private String firstName;

@@ -9,11 +9,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Main {
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            public void run() {
-                DBConnection.getSession().close();
-                System.out.println("Session closed");
-            }
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            DBConnection.getSession().close();
+            System.out.println("Session closed");
         }, "Close session"));
     }
 }

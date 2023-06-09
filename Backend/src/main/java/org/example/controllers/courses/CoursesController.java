@@ -6,15 +6,12 @@ import org.example.models.users.Mentor;
 import org.example.models.users.Participant;
 import org.example.models.views.AvailableCourse;
 import org.hibernate.Transaction;
-import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
-import org.hibernate.exception.GenericJDBCException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.*;
 

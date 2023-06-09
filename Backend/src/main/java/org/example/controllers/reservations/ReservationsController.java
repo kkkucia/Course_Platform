@@ -1,11 +1,7 @@
 package org.example.controllers.reservations;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import org.example.controllers.MainController;
 import org.example.models.courses.Reservation;
-import org.example.models.views.AvailableCourse;
 import org.example.models.views.CanceledReservation;
 import org.example.models.views.ReservationFromFunction;
 import org.hibernate.exception.GenericJDBCException;

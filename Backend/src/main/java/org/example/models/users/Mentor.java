@@ -3,11 +3,11 @@ package org.example.models.users;
 import org.example.models.courses.Course;
 import org.example.utils.DbElement;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 public class Mentor extends User implements DbElement {

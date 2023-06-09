@@ -5,9 +5,7 @@ import org.example.utils.DbElement;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Entity
 public class Invoice implements DbElement {
@@ -28,6 +26,12 @@ public class Invoice implements DbElement {
         this.type = type;
         this.allPrice = allPrice;
 //        this.reservations = new HashSet<>();
+    }
+
+    public Invoice(Object[] data) {
+        this.id = ((BigDecimal)data[0]).longValue();
+        this.transactionDate = (Date) data[1];
+        this.allPrice = (BigDecimal) data[2];
     }
 
     public Invoice() {
