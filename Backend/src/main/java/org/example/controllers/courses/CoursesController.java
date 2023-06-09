@@ -19,16 +19,8 @@ public class CoursesController extends MainController {
     @CrossOrigin
     @GetMapping("/courses/available")
     public String getAvailableCourses() {
-        Object[] objects = session.createSQLQuery("SELECT * FROM AVAILABLE_COURSES_VIEW").stream().toArray();
-        List<AvailableCourse> availableCourses = new ArrayList<>();
-        Object[] currObj;
-        AvailableCourse availableCourse;
-        for (Object result : objects) {
-            currObj = (Object[]) result;
-            availableCourse = new AvailableCourse(currObj);
-            availableCourses.add(availableCourse);
-        }
-        return gson.toJson(availableCourses);
+        Query query = session.createSQLQuery("SELECT * FROM AVAILABLE_COURSES_VIEW");
+        return returnPreparedAvailableCourses(query);
     }
 
     @CrossOrigin
@@ -37,6 +29,20 @@ public class CoursesController extends MainController {
         Query query = session.createSQLQuery("SELECT * FROM F_AVAILABLE_COURSES_ON_TIME(:startDate,:endDate)")
                 .setParameter("startDate", dateMap.get("startDate"))
                 .setParameter("endDate", dateMap.get("endDate"));
+        return returnPreparedAvailableCourses(query);
+    }
+
+    @CrossOrigin
+    @GetMapping("/courses/categories/available/between")
+    public String getAvailableCoursesBetweenDatesByCategory(@RequestBody Map<String, String> inputMap) {
+        Query query = session.createSQLQuery("SELECT * FROM f_available_courses_by_category_on_time(:startDate,:endDate, :category_id)")
+                .setParameter("startDate", Date.valueOf(inputMap.get("startDate")))
+                .setParameter("endDate", Date.valueOf(inputMap.get("endDate")))
+                .setParameter("category_id", Integer.parseInt(inputMap.get("category_id")));
+        return returnPreparedAvailableCourses(query);
+    }
+
+    private String returnPreparedAvailableCourses(Query query){
         List<AvailableCourse> availableCourses = new ArrayList<>();
         Object[] currObj;
         AvailableCourse availableCourse;
@@ -72,8 +78,10 @@ public class CoursesController extends MainController {
     @CrossOrigin
     @PostMapping("/courses")
     public ResponseEntity addCourse(@RequestBody Course course) {
-        System.out.println(course.getStartDate());
-        System.out.println(course.getEndDate());
+//        System.out.println(course.getStartDate());
+//        System.out.println(course.getEndDate());
+//        System.out.println(course.getMaxNoPlaces());
+//        System.out.println(course.getAvailablePlaces());
         Transaction tx = session.beginTransaction();
         session.save(course);
         tx.commit();
