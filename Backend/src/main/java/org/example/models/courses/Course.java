@@ -66,6 +66,13 @@ public class Course implements DbElement {
         return endDate;
     }
 
+    public int getMaxNoPlaces() {
+        return maxNoPlaces;
+    }
+
+    public int getAvailablePlaces() {
+        return availablePlaces;
+    }
 
     @Override
     public String toString() {

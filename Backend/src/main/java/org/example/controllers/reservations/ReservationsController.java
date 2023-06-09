@@ -7,6 +7,7 @@ import org.example.controllers.MainController;
 import org.example.models.courses.Reservation;
 import org.example.models.views.AvailableCourse;
 import org.example.models.views.CanceledReservation;
+import org.example.models.views.ReservationFromFunction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,22 @@ public class ReservationsController extends MainController {
             currObj = (Object[]) result;
             canceledReservation = new CanceledReservation(currObj);
             canceledReservationList.add(canceledReservation);
+        }
+        return gson.toJson(canceledReservationList);
+    }
+
+    @CrossOrigin
+    @GetMapping("/reservations/courses")
+    public String getReservationsFromCourse(@RequestBody Map<String, Integer> input) {
+        Query query = session.createSQLQuery("SELECT * FROM f_reservations_from_course(:course_id)")
+                .setParameter("course_id", input.get("course_id"));
+        List<ReservationFromFunction> canceledReservationList = new ArrayList<>();
+        Object[] currObj;
+        ReservationFromFunction reservation;
+        for (Object result : query.getResultList()) {
+            currObj = (Object[]) result;
+            reservation = new ReservationFromFunction(currObj);
+            canceledReservationList.add(reservation);
         }
         return gson.toJson(canceledReservationList);
     }
