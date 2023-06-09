@@ -1,13 +1,10 @@
 package org.example.controllers.reservations;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import org.example.controllers.MainController;
 import org.example.models.courses.Reservation;
-import org.example.models.views.AvailableCourse;
 import org.example.models.views.CanceledReservation;
 import org.example.models.views.ReservationFromFunction;
+import org.hibernate.exception.GenericJDBCException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,15 +39,31 @@ public class ReservationsController extends MainController {
     public String getReservationsFromCourse(@RequestBody Map<String, Integer> input) {
         Query query = session.createSQLQuery("SELECT * FROM f_reservations_from_course(:course_id)")
                 .setParameter("course_id", input.get("course_id"));
+        return prepareQueryWithReservations(query);
+    }
+
+    private String prepareQueryWithReservations(Query query) {
         List<ReservationFromFunction> canceledReservationList = new ArrayList<>();
         Object[] currObj;
         ReservationFromFunction reservation;
-        for (Object result : query.getResultList()) {
-            currObj = (Object[]) result;
-            reservation = new ReservationFromFunction(currObj);
-            canceledReservationList.add(reservation);
+        try {
+            for (Object result : query.getResultList()) {
+                currObj = (Object[]) result;
+                reservation = new ReservationFromFunction(currObj);
+                canceledReservationList.add(reservation);
+            }
+        } catch (GenericJDBCException ignored) {
+
         }
         return gson.toJson(canceledReservationList);
+    }
+
+    @CrossOrigin
+    @GetMapping("/reservations/unpaid/users")
+    public String getUnPaidReservationsForUser(@RequestBody Map<String, Integer> input) {
+        Query query = session.createSQLQuery("SELECT * FROM f_unpaid_reservations_for_participant(:user_id)")
+                .setParameter("user_id", input.get("user_id"));
+        return prepareQueryWithReservations(query);
     }
 
     @CrossOrigin

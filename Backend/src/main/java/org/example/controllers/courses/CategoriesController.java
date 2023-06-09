@@ -2,7 +2,6 @@ package org.example.controllers.courses;
 
 import org.example.controllers.MainController;
 import org.example.models.courses.Category;
-import org.hibernate.query.Query;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

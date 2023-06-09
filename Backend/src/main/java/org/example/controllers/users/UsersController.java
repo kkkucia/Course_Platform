@@ -1,7 +1,6 @@
 package org.example.controllers.users;
 
 import org.example.controllers.MainController;
-import org.example.models.courses.Course;
 import org.example.models.users.Participant;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
