@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import axios from 'axios'
-import '../Styles/Form.css'
+import '../../Styles/Form.css'
 
 const AddCourses = () => {
   const [responseMessage, setResponseMessage] = useState("")
