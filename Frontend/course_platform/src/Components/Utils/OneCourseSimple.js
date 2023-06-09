@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 
 const OneCourseSimple = ({ data, ...props }) => {
     return <>
-        <div className='simpleCourse'>
+        <div key={data[0]} className='simpleCourse'>
             <h4>
-                {data.slice(0, 3).join(" ")}
+                {Object.values(data).join(" ")}
             </h4>
         </div>
     </>
