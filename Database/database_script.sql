@@ -655,49 +655,41 @@ exception
 end;
 
 -- zapłać za konkretną rezerwacje (stworzy fakture dla pojedyńczej rezerwacji)
-create
-or replace PROCEDURE pay_for_reservation(reservation_id IN RESERVATION.ID%TYPE, payment_type INVOICE.TYPE%type)
+create PROCEDURE pay_for_reservation(reservation_id IN RESERVATION.ID%TYPE, payment_type INVOICE.TYPE%type)
 AS
-    course_price  COURSE.PRICE%TYPE;
-    invoice_id
-INVOICE.ID%TYPE;
-    reservation_status
-RESERVATION.STATUS%TYPE;
+    course_price       COURSE.PRICE%TYPE;
+    invoice_id         INVOICE.ID%TYPE;
+    reservation_status RESERVATION.STATUS%TYPE;
 BEGIN
-    reservation_exist
-(reservation_id);
+    reservation_exist(reservation_id);
 
-SELECT c.PRICE, r.STATUS
-INTO course_price, reservation_status
-FROM RESERVATION r
-         INNER JOIN COURSE c on c.ID = r.COURSE_FK
-WHERE r.ID = reservation_id;
+    SELECT c.PRICE, r.STATUS
+    INTO course_price, reservation_status
+    FROM RESERVATION r
+             INNER JOIN COURSE c on c.ID = r.COURSE_FK
+    WHERE r.ID = reservation_id;
 
-if
-reservation_status != 2 then
+    if reservation_status != 2 then
         raise_application_error(-20001, 'ERROR: This reservation was already paid.');
-end if;
+    end if;
 
-SELECT invoice_seq.NEXTVAL
-INTO invoice_id
-FROM dual;
+    SELECT invoice_seq.NEXTVAL INTO invoice_id FROM dual;
 
-INSERT INTO INVOICE (ID, ALLPRICE, TRANSACTION_DATE, "TYPE")
-VALUES (invoice_id, course_price, current_date, payment_type);
+    INSERT INTO INVOICE (ID, ALLPRICE, TRANSACTION_DATE, "TYPE")
+    VALUES (invoice_id, course_price, current_date, payment_type);
 
-update RESERVATION r
-set r.STATUS = 0 --PAID
-where reservation_id = r.ID;
+    update RESERVATION r
+    set r.STATUS = 0, --PAID
+     r.CONNECTED_RESERVATION_FK = invoice_id
+    where reservation_id = r.ID;
 
-ADD_LOG_RESERVATION
-(0, reservation_id);
-
-COMMIT;
+    COMMIT;
 EXCEPTION
     WHEN OTHERS THEN
         ROLLBACK;
         raise;
 END;
+
 
 -- przypisz kurs do danej kategorii
 create or replace procedure add_course_to_category(
@@ -721,50 +713,53 @@ exception
 end;
 
 
--- zapłać za wszystkie nieopłacone kursy dla danego klienta(stwórz fakture)
-CREATE
-OR REPLACE PROCEDURE pay_for_all_unpaid_reservations(participant_id PARTICIPANT.ID%TYPE,
-                                                            payment_type INVOICE.TYPE%TYPE)
+--stwórz podsumowanie paragonu - główna 'invoice'
+create PROCEDURE make_main_invoice(
+    invoice_price INVOICE.ALLPRICE%TYPE,
+    payment_type INVOICE.TYPE%type)
 AS
-    reservation_id RESERVATION.ID%TYPE;
-    invoice_price
-INVOICE.ALLPRICE%TYPE;
-    invoice_id
-INVOICE.ID%TYPE;
+    invoice_id         INVOICE.ID%TYPE;
 BEGIN
 
-    invoice_price
-:= f_amount_to_pay_for_participant(participant_id);
+    SELECT invoice_seq.NEXTVAL INTO invoice_id FROM dual;
 
-FOR rec IN (SELECT r.ID, c.PRICE
-                FROM RESERVATION r
-                         INNER JOIN COURSE c ON c.ID = r.COURSE_FK
-                WHERE r.STATUS = 1
-                  AND r.PARTICIPANT_FK = participant_id)
-        LOOP
-            reservation_id := rec.ID;
+    INSERT INTO INVOICE (ID, ALLPRICE, TRANSACTION_DATE, "TYPE")
+    VALUES (invoice_id, invoice_price, current_date, payment_type);
 
-            pay_for_reservation
-(reservation_id, payment_type);
-
-UPDATE RESERVATION r
-SET r.STATUS = 0
-WHERE r.ID = reservation_id;
-
-END LOOP;
-
-SELECT invoice_seq.NEXTVAL
-INTO invoice_id
-FROM dual;
-
-INSERT INTO INVOICE (ID, ALLPRICE, TRANSACTION_DATE, "TYPE")
-VALUES (invoice_id, invoice_price, current_date, payment_type);
-
-COMMIT;
+    COMMIT;
 EXCEPTION
     WHEN OTHERS THEN
         ROLLBACK;
-        RAISE;
+        raise;
+END;
+
+
+-- zapłać za wszystkie nieopłacone kursy dla danego klienta(stwórz fakture)
+create PROCEDURE pay_for_all_unpaid_reservations(participant_id IN PARTICIPANT.ID%TYPE, payment_type INVOICE.TYPE%TYPE)
+AS
+  reservation_id RESERVATION.ID%TYPE;
+  invoice_price  INVOICE.ALLPRICE%TYPE;
+BEGIN
+    invoice_price := f_amount_to_pay_for_participant(participant_id);
+
+  FOR rec IN (SELECT r.ID
+              FROM RESERVATION r
+              INNER JOIN COURSE c ON c.ID = r.COURSE_FK
+              WHERE r.STATUS = 2
+              AND r.PARTICIPANT_FK = participant_id)
+  LOOP
+    reservation_id := rec.ID;
+    pay_for_reservation(reservation_id, payment_type);
+  END LOOP;
+
+  COMMIT;
+    make_main_invoice(invoice_price, payment_type );
+    COMMIT;
+
+EXCEPTION
+  WHEN OTHERS THEN
+    ROLLBACK;
+    RAISE;
 END;
 
 --Odrzuć daną prezentacje  (ustawia status rezerwacji na anulowany)
