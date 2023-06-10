@@ -54,14 +54,13 @@ public class InvoicesController extends MainController {
     @CrossOrigin
     @GetMapping("/invoices/unpaid/sum")
     public BigDecimal getSumOfUnpaidInvoices(@RequestBody Map<String, Integer> inputData) {
-        Query query = session.createSQLQuery("SELECT * FROM f_amount_to_pay_for_participant(:participant_id)")
+        Query query = session.createSQLQuery("SELECT f_amount_to_pay_for_participant(:participant_id) FROM DUAL")
                 .setParameter("participant_id", inputData.get("participant_id"));
-        BigDecimal result;
-        try {
-            result = (BigDecimal) (((Object[]) query.getResultList().stream().findFirst().orElse(new BigDecimal[]{BigDecimal.ZERO}))[0]);
-        } catch (PersistenceException ignored) {
-            result = BigDecimal.ZERO;
+        BigDecimal finalSum = BigDecimal.ZERO;
+        Object result = query.getSingleResult();
+        if (result != null) {
+            finalSum = BigDecimal.valueOf(Long.parseLong(result.toString()));
         }
-        return result;
+        return finalSum;
     }
 }

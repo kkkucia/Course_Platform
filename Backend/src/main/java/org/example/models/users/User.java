@@ -36,7 +36,7 @@ public abstract class User implements DbElement {
     public User() {
     }
 
-    protected long getId() {
+    public long getId() {
         return id;
     }
 
@@ -48,11 +48,11 @@ public abstract class User implements DbElement {
         return lastName;
     }
 
-    protected String getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    protected String getEmail() {
+    public String getEmail() {
         return email;
     }
 
