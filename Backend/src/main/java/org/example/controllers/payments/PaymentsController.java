@@ -1,4 +1,4 @@
-package org.example.controllers.payment;
+package org.example.controllers.payments;
 
 import org.example.controllers.MainController;
 import org.springframework.http.HttpStatus;
@@ -13,7 +13,7 @@ import javax.persistence.Query;
 import java.util.Map;
 
 @RestController
-public class PaymentController extends MainController {
+public class PaymentsController extends MainController {
     @CrossOrigin
     @PostMapping("/payments/reservations")
     public ResponseEntity<HttpStatus> payForReservation(@RequestBody Map<String, String> json) {
