@@ -89,7 +89,7 @@ public class ReservationsController extends MainController {
 
     @CrossOrigin
     @PostMapping("/reservations")
-    public ResponseEntity makeReservation(@RequestBody Map<String, Long> json) {
+    public ResponseEntity<HttpStatus> makeReservation(@RequestBody Map<String, Long> json) {
         try {
             Query query = session.createSQLQuery(
                             "CALL make_reservation(:course_id, :participant_id)")
@@ -102,4 +102,20 @@ public class ReservationsController extends MainController {
         }
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+    @CrossOrigin
+    @PutMapping("/reservations")
+    public ResponseEntity<HttpStatus> cancelReservation(@RequestBody Map<String, Long> json){
+        try {
+            Query query = session.createSQLQuery(
+                            "CALL cancel_reservation(:reservation_id)")
+                    .setParameter("reservation_id", json.get("reservation_id"));
+            System.out.println(query.getResultList());
+        } catch (PersistenceException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST);
+        } catch (NegativeArraySizeException ignored) {
+        }
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
+
 }
