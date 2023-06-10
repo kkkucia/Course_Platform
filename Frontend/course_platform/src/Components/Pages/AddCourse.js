@@ -1,12 +1,12 @@
 import React, {useState} from 'react'
 import axios from 'axios'
-import '../Styles/Form.css'
+import '../../Styles/Form.css'
 
 const AddCourses = () => {
   const [responseMessage, setResponseMessage] = useState("")
   const addCourse = (event) => {
     event.preventDefault()
-    let trip = {
+    let course = {
       title:event.target.courseTitle.value,
       price:event.target.coursePrice.value,
       startDate:event.target.courseStartDate.value,
@@ -14,15 +14,15 @@ const AddCourses = () => {
       maxNoPlaces:event.target.courseMaxPlaces.value,
       availablePlaces:event.target.courseAvailablePlaces.value,
     }
-    // console.log(trip)
-    axios.post('http://localhost:8080/courses', trip, {headers:{"Content-Type":"application/json"}}).then((res) => {
+    // console.log(course)
+    axios.post('http://localhost:8080/courses', course, {headers:{"Content-Type":"application/json"}}).then((res) => {
       if (res.status === 200) {
-        setResponseMessage("Added new "+ trip.title +" trip")
+        setResponseMessage("Added new "+ course.title +" course")
       }
     })
     .catch((err) => {
       console.log(err.response.data)
-      setResponseMessage("Error with adding "+ trip.title +" trip. Error:" + err.response.data.error)
+      setResponseMessage("Error with adding "+ course.title +" course. Error:" + err.response.data.error)
     })
     
   }
