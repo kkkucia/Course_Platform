@@ -19,6 +19,5 @@ public class CategoriesController extends MainController {
         List<Category> reservations = new ArrayList<>();
         Arrays.stream(queryResults).forEach(queryResult -> reservations.add((Category) queryResult));
         return reservations;
-//        Query<Category> categories = session.createQuery("from categories_view")
     }
 }
