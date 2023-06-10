@@ -21,7 +21,7 @@ public class PaymentController extends MainController {
             Query query = session.createSQLQuery(
                             "CALL PAY_FOR_RESERVATION(:reservation_id, :payment_type)")
                     .setParameter("reservation_id", Long.parseLong(json.get("reservation_id")))
-                    .setParameter("payment_type", Integer.parseInt(json.get("payment_type")));
+                    .setParameter("payment_type", json.get("payment_type").toUpperCase());
             System.out.println(query.getResultList());
         } catch (PersistenceException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST);
@@ -30,9 +30,6 @@ public class PaymentController extends MainController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-
-    //    nie przetestowane bo logi jeszcze nie działały
-//    TODO przetestowac
     @CrossOrigin
     @PostMapping("/payments/participants/reservations")
     public ResponseEntity payForAllParticipantReservations(@RequestBody Map<String, String> json) {
@@ -40,7 +37,7 @@ public class PaymentController extends MainController {
             Query query = session.createSQLQuery(
                             "CALL PAY_FOR_ALL_UNPAID_RESERVATIONS(:participant_id, :payment_type)")
                     .setParameter("participant_id", Long.parseLong(json.get("participant_id")))
-                    .setParameter("payment_type", Integer.parseInt(json.get("payment_type")));
+                    .setParameter("payment_type", json.get("payment_type").toUpperCase());
             System.out.println(query.getResultList());
         } catch (PersistenceException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST);
