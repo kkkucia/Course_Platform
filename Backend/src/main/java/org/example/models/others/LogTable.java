@@ -7,7 +7,7 @@ import org.example.utils.ReservationStatus;
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity(name="Log_table")
+@Entity(name = "Log_table")
 public class LogTable implements DbElement {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -26,6 +26,23 @@ public class LogTable implements DbElement {
     }
 
     public LogTable() {
+    }
+
+
+    public long getId() {
+        return id;
+    }
+
+    public Reservation getReservation() {
+        return reservation;
+    }
+
+    public Date getLogDate() {
+        return logDate;
+    }
+
+    public ReservationStatus getStatus() {
+        return status;
     }
 
     @Override
