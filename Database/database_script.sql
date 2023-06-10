@@ -699,6 +699,27 @@ EXCEPTION
         raise;
 END;
 
+-- przypisz kurs do danej kategorii
+create or replace procedure add_course_to_category(
+    course_id course.id%type,
+    category_id CATEGORY.id%type
+)
+as
+begin
+    course_exist(course_id);
+    CATEGORY_EXIST(category_id);
+
+    UPDATE COURSE c
+    SET c.CATEGORY_FK = category_id
+    WHERE c.ID = course_id;
+
+    commit;
+exception
+    when others then
+        rollback;
+        raise;
+end;
+
 
 -- zapłać za wszystkie nieopłacone kursy dla danego klienta(stwórz fakture)
 CREATE
