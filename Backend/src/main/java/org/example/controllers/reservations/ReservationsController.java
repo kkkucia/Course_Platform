@@ -4,7 +4,6 @@ import org.example.controllers.MainController;
 import org.example.models.courses.Reservation;
 import org.example.models.views.reservation.CanceledReservation;
 import org.example.models.views.reservation.ReservationFromFunction;
-import org.hibernate.exception.GenericJDBCException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,17 +51,24 @@ public class ReservationsController extends MainController {
                 reservation = new ReservationFromFunction(currObj);
                 canceledReservationList.add(reservation);
             }
-        } catch (GenericJDBCException ignored) {
-
+        } catch (PersistenceException ignored) {
         }
         return gson.toJson(canceledReservationList);
     }
 
     @CrossOrigin
     @GetMapping("/reservations/unpaid/users")
-    public String getUnPaidReservationsForUser(@RequestBody Map<String, Integer> input) {
+    public String getUnpaidReservationsForUser(@RequestBody Map<String, Long> input) {
         Query query = session.createSQLQuery("SELECT * FROM f_unpaid_reservations_for_participant(:user_id)")
                 .setParameter("user_id", input.get("user_id"));
+        return prepareQueryWithReservations(query);
+    }
+
+    @CrossOrigin
+    @GetMapping("/reservations/participants")
+    public String getReservationsForParticipant(@RequestBody Map<String, Long> input) {
+        Query query = session.createSQLQuery("SELECT * FROM f_reservations_for_participant(:participant_id)")
+                .setParameter("participant_id", input.get("participant_id"));
         return prepareQueryWithReservations(query);
     }
 

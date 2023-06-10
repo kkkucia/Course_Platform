@@ -130,7 +130,7 @@ public class CoursesController extends MainController {
 
     @CrossOrigin
     @PostMapping("/courses")
-    public ResponseEntity addCourse(@RequestBody Course course) {
+    public ResponseEntity<HttpStatus> addCourse(@RequestBody Course course) {
 //        System.out.println(course.getStartDate());
 //        System.out.println(course.getEndDate());
 //        System.out.println(course.getMaxNoPlaces());
@@ -143,7 +143,7 @@ public class CoursesController extends MainController {
 
     @CrossOrigin
     @PostMapping("/courses/mentors")
-    public ResponseEntity addMentorToCourse(@RequestBody Map<String, Long> json) {
+    public ResponseEntity<HttpStatus> addMentorToCourse(@RequestBody Map<String, Long> json) {
         try {
             Query query = session.createSQLQuery(
                             "CALL add_mentor_to_course(:course_id, :mentor_id)")

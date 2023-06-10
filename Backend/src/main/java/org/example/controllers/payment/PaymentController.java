@@ -16,7 +16,7 @@ import java.util.Map;
 public class PaymentController extends MainController {
     @CrossOrigin
     @PostMapping("/payments/reservations")
-    public ResponseEntity payForReservation(@RequestBody Map<String, String> json) {
+    public ResponseEntity<HttpStatus> payForReservation(@RequestBody Map<String, String> json) {
         try {
             Query query = session.createSQLQuery(
                             "CALL PAY_FOR_RESERVATION(:reservation_id, :payment_type)")
