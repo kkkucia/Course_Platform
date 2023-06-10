@@ -74,6 +74,22 @@ public class Course implements DbElement {
         return availablePlaces;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public Set<Mentor> getMentors() {
+        return mentors;
+    }
+
     @Override
     public String toString() {
         return "Course{" +

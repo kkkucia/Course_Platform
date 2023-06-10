@@ -18,6 +18,8 @@ public class Participant extends User implements DbElement {
         super(((BigDecimal) data[0]).longValue(), (String) data[1], (String) data[2], (String) data[3], (String) data[4]);
     }
 
+
+
     @Override
     public String toString() {
         return "Participant{" +

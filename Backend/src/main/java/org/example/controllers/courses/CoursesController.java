@@ -4,7 +4,7 @@ import org.example.controllers.MainController;
 import org.example.models.courses.Course;
 import org.example.models.users.Mentor;
 import org.example.models.users.Participant;
-import org.example.models.views.AvailableCourse;
+import org.example.models.views.course.AvailableCourse;
 import org.hibernate.Transaction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -130,7 +130,7 @@ public class CoursesController extends MainController {
 
     @CrossOrigin
     @PostMapping("/courses")
-    public ResponseEntity addCourse(@RequestBody Course course) {
+    public ResponseEntity<HttpStatus> addCourse(@RequestBody Course course) {
 //        System.out.println(course.getStartDate());
 //        System.out.println(course.getEndDate());
 //        System.out.println(course.getMaxNoPlaces());
@@ -143,7 +143,7 @@ public class CoursesController extends MainController {
 
     @CrossOrigin
     @PostMapping("/courses/mentors")
-    public ResponseEntity addMentorToCourse(@RequestBody Map<String, Long> json) {
+    public ResponseEntity<HttpStatus> addMentorToCourse(@RequestBody Map<String, Long> json) {
         try {
             Query query = session.createSQLQuery(
                             "CALL add_mentor_to_course(:course_id, :mentor_id)")

@@ -5,6 +5,7 @@ import org.example.utils.DbElement;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Set;
 
 @Entity
@@ -30,11 +31,15 @@ public class Invoice implements DbElement {
 
     public Invoice(Object[] data) {
         this.id = ((BigDecimal)data[0]).longValue();
-        this.transactionDate = (Date) data[1];
+        this.transactionDate = Date.valueOf(((Timestamp) data[1]).toLocalDateTime().toLocalDate());
         this.allPrice = (BigDecimal) data[2];
     }
 
     public Invoice() {
+    }
+
+    public BigDecimal getAllPrice() {
+        return allPrice;
     }
 
     @Override

@@ -25,6 +25,13 @@ public class Category implements DbElement {
         return categoryName;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
 
     @Override
     public String toString() {

@@ -1,4 +1,4 @@
-package org.example.models.views;
+package org.example.models.views.invoice;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
