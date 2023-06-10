@@ -1,4 +1,4 @@
-package org.example.models.views;
+package org.example.models.views.reservation;
 
 import java.math.BigDecimal;
 

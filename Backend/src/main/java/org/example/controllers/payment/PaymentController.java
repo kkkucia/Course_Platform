@@ -32,7 +32,7 @@ public class PaymentController extends MainController {
 
     @CrossOrigin
     @PostMapping("/payments/participants/reservations")
-    public ResponseEntity payForAllParticipantReservations(@RequestBody Map<String, String> json) {
+    public ResponseEntity<HttpStatus> payForAllParticipantReservations(@RequestBody Map<String, String> json) {
         try {
             Query query = session.createSQLQuery(
                             "CALL PAY_FOR_ALL_UNPAID_RESERVATIONS(:participant_id, :payment_type)")
