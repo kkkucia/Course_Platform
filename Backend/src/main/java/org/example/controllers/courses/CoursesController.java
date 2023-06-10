@@ -4,7 +4,7 @@ import org.example.controllers.MainController;
 import org.example.models.courses.Course;
 import org.example.models.users.Mentor;
 import org.example.models.users.Participant;
-import org.example.models.views.AvailableCourse;
+import org.example.models.views.course.AvailableCourse;
 import org.hibernate.Transaction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

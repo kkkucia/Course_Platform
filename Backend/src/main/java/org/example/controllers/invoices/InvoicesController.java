@@ -2,7 +2,7 @@ package org.example.controllers.invoices;
 
 import org.example.controllers.MainController;
 import org.example.models.courses.Invoice;
-import org.example.models.views.InvoiceViewElement;
+import org.example.models.views.invoice.InvoiceViewElement;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;

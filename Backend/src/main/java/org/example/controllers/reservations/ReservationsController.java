@@ -2,8 +2,8 @@ package org.example.controllers.reservations;
 
 import org.example.controllers.MainController;
 import org.example.models.courses.Reservation;
-import org.example.models.views.CanceledReservation;
-import org.example.models.views.ReservationFromFunction;
+import org.example.models.views.reservation.CanceledReservation;
+import org.example.models.views.reservation.ReservationFromFunction;
 import org.hibernate.exception.GenericJDBCException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
