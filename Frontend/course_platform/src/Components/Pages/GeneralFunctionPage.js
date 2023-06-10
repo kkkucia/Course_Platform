@@ -6,13 +6,13 @@ const GeneralFunctionPage = (input) => {
   // console.log(input)
   const [responseMessage, setResponseMessage] = useState(Array([]))
 
-  console.log(responseMessage)
+  // console.log(responseMessage)
   const handle = (event) => {
     event.preventDefault()
     let data = {}
     for (let i=0; i < input.inputTypes.length; i++) {
-      console.log(event.target[input.requiredData[i]].value)
-      console.log(data)
+      // console.log(event.target[input.requiredData[i]].value)
+      // console.log(data)
       data = Object.assign({[input.requiredData[i]]: event.target[input.requiredData[i]].value}, data)
     }
     console.log(data)
@@ -46,8 +46,8 @@ const GeneralFunctionPage = (input) => {
       </form>
       <div id='response'>
         <ul>
-          {responseMessage.map(el => (
-            <li>
+          {responseMessage.map((el, key) => (
+            <li key={key}>
               {JSON.stringify(el)}
             </li>
           ))}

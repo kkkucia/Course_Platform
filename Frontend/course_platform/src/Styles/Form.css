@@ -3,6 +3,26 @@ form {
     flex-direction: column;
     align-items: center;
 }
-input[name="submit"] {
+input {
+    border: none;
+    background-color: transparent;
+    border-bottom: 2px solid darkblue;
+    outline:none;
+}
+input[type="submit"] {
     width: 200px;
+    border:none;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: blueviolet;
+    font-size: large;
+    margin: 20px;
+    transition: 0.2s ease-in;
+}
+input[type="submit"]:hover {
+    background-color: rgb(166, 97, 231);
+}
+input[type="submit"]:active {
+    transition: 0.1s;
+    background-color: rgb(106, 14, 192);
 }
