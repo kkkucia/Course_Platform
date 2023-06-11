@@ -26,7 +26,7 @@ public class CoursesController extends MainController {
     }
 
     @CrossOrigin
-    @GetMapping("/courses/available/between")
+    @PostMapping("/courses/available/between")
     public String getAvailableCoursesBetweenDates(@RequestBody Map<String, Date> dateMap) {
         Query query = session.createSQLQuery("SELECT * FROM F_AVAILABLE_COURSES_ON_TIME(:startDate,:endDate)")
                 .setParameter("startDate", dateMap.get("startDate"))
@@ -35,7 +35,7 @@ public class CoursesController extends MainController {
     }
 
     @CrossOrigin
-    @GetMapping("/courses/categories/available/between")
+    @PostMapping("/courses/categories/available/between")
     public String getAvailableCoursesBetweenDatesByCategory(@RequestBody Map<String, String> inputMap) {
         Query query = session.createSQLQuery("SELECT * FROM f_available_courses_by_category_on_time(:startDate,:endDate, :category_id)")
                 .setParameter("startDate", Date.valueOf(inputMap.get("startDate")))
@@ -60,7 +60,7 @@ public class CoursesController extends MainController {
     }
 
     @CrossOrigin
-    @GetMapping("/courses/participants")
+    @PostMapping("/courses/participants")
     public String getParticipantsForCourse(@RequestBody Map<String, Integer> inputMap) {
         Query query = session.createSQLQuery("SELECT * FROM f_participants_from_course(:course_id)")
                 .setParameter("course_id", inputMap.get("course_id"));
@@ -79,7 +79,7 @@ public class CoursesController extends MainController {
     }
 
     @CrossOrigin
-    @GetMapping("/courses/mentors")
+    @PostMapping("/courses/mentors")
     public String getMentorsForCourse(@RequestBody Map<String, Integer> inputMap) {
         Query query = session.createSQLQuery("SELECT * FROM f_mentors_from_course(:course_id)")
                 .setParameter("course_id", inputMap.get("course_id"));
@@ -142,7 +142,7 @@ public class CoursesController extends MainController {
     }
 
     @CrossOrigin
-    @PostMapping("/courses/mentors")
+    @PostMapping("/courses/mentors/add")
     public ResponseEntity<HttpStatus> addMentorToCourse(@RequestBody Map<String, Long> json) {
         try {
             Query query = session.createSQLQuery(

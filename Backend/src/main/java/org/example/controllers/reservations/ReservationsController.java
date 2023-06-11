@@ -34,7 +34,7 @@ public class ReservationsController extends MainController {
     }
 
     @CrossOrigin
-    @GetMapping("/reservations/courses")
+    @PostMapping("/reservations/courses")
     public String getReservationsFromCourse(@RequestBody Map<String, Integer> input) {
         Query query = session.createSQLQuery("SELECT * FROM f_reservations_from_course(:course_id)")
                 .setParameter("course_id", input.get("course_id"));
@@ -57,7 +57,7 @@ public class ReservationsController extends MainController {
     }
 
     @CrossOrigin
-    @GetMapping("/reservations/unpaid/users")
+    @PostMapping("/reservations/unpaid/users")
     public String getUnpaidReservationsForUser(@RequestBody Map<String, Long> input) {
         Query query = session.createSQLQuery("SELECT * FROM f_unpaid_reservations_for_participant(:user_id)")
                 .setParameter("user_id", input.get("user_id"));
@@ -65,7 +65,7 @@ public class ReservationsController extends MainController {
     }
 
     @CrossOrigin
-    @GetMapping("/reservations/participants")
+    @PostMapping("/reservations/participants")
     public String getReservationsForParticipant(@RequestBody Map<String, Long> input) {
         Query query = session.createSQLQuery("SELECT * FROM f_reservations_for_participant(:participant_id)")
                 .setParameter("participant_id", input.get("participant_id"));
@@ -110,7 +110,7 @@ public class ReservationsController extends MainController {
     }
 
     @CrossOrigin
-    @PutMapping("/reservations")
+    @PostMapping("/reservations/cancel")
     public ResponseEntity<HttpStatus> cancelReservation(@RequestBody Map<String, Long> json){
         try {
             Query query = session.createSQLQuery(
