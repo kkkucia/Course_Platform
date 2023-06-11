@@ -46,6 +46,12 @@ const Navbar = () => {
               <li><Link to="/functions/availableCoursesBetweenDates">Available courses between dates</Link></li>
               <li><Link to="/functions/availableCoursesBetweenDatesByCategory">Available courses between dates by category</Link></li>
               <li><Link to="/functions/getReservationsFromCourses">Reservations from course</Link></li>
+              <li><Link to="/functions/mentorsFromCourse">Mentors from course</Link></li>
+              <li><Link to="/functions/participantsFromCourse">Participants from course</Link></li>
+              <li><Link to="/functions/invoicesFromParticipant">Invoices from participant</Link></li>
+              <li><Link to="/functions/participantUnpaidSum">Unpaid sum for participant</Link></li>
+              <li><Link to="/functions/participantUnpaidReservations">Unpaid reservations for participant</Link></li>
+              <li><Link to="/functions/participantReservations">Reservations for participant</Link></li>
             </ul>
           </label>  
       </nav>

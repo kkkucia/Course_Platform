@@ -16,10 +16,14 @@ const GeneralFunctionPage = (input) => {
       data = Object.assign({[input.requiredData[i]]: event.target[input.requiredData[i]].value}, data)
     }
     console.log(data)
-    axios.get(input.link, {params:data}).then((res) => {
+    axios.post(input.link, data).then((res) => {
       if (res.status === 200) {
-        // setResponseMessage("Procedure run correctly with data "+JSON.stringify(data))
-        console.log(res.data)
+        // console.log(res.data)
+        let tmp = res.data
+        if (!Array.isArray(res.data)) {
+          tmp = [res.data]
+        }
+        setResponseMessage(tmp)
       }
     })
     .catch((err) => {

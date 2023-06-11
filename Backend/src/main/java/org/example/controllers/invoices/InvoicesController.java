@@ -3,10 +3,7 @@ package org.example.controllers.invoices;
 import org.example.controllers.MainController;
 import org.example.models.courses.Invoice;
 import org.example.models.views.invoice.InvoiceViewElement;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
@@ -33,7 +30,7 @@ public class InvoicesController extends MainController {
     }
 
     @CrossOrigin
-    @GetMapping("/invoices/users")
+    @PostMapping("/invoices/users")
     public String getInvoicesForUser(@RequestBody Map<String, Integer> inputData) {
         Query query = session.createSQLQuery("SELECT * FROM f_invoices_for_participant(:participant_id)")
                 .setParameter("participant_id", inputData.get("participant_id"));
@@ -52,7 +49,7 @@ public class InvoicesController extends MainController {
     }
 
     @CrossOrigin
-    @GetMapping("/invoices/unpaid/sum")
+    @PostMapping("/invoices/unpaid/sum")
     public BigDecimal getSumOfUnpaidInvoices(@RequestBody Map<String, Integer> inputData) {
         Query query = session.createSQLQuery("SELECT f_amount_to_pay_for_participant(:participant_id) FROM DUAL")
                 .setParameter("participant_id", inputData.get("participant_id"));
