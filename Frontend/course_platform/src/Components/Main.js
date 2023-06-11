@@ -24,6 +24,8 @@ const Main = () => {
                 <Route path="/basic/categories" element={<GeneralList srcLink={'http://localhost:8080/categories'} text={"List of all categories"} />} />
                 <Route path="/basic/reservations" element={<GeneralList srcLink={'http://localhost:8080/reservations'} text={"List of all reservations"} />} />
                 <Route path="/basic/participants" element={<GeneralList srcLink={'http://localhost:8080/participants'} text={"List of all participants"} />} />
+                <Route path="/basic/mentors" element={<GeneralList srcLink={'http://localhost:8080/mentors'} text={"List of all mentors"} />} />
+                <Route path="/basic/logs" element={<GeneralList srcLink={'http://localhost:8080/logs'} text={"List of all logs"} />} />
 
                 <Route path="/views/availableCourses" element={<AvailableCoursesList />} />
                 <Route path="/views/invoices" element={<GeneralList srcLink={'http://localhost:8080/invoices'} text={"List of invoices"} />} />
@@ -34,6 +36,8 @@ const Main = () => {
                 <Route path="/procedures/payForReservation" element={<GeneralProcedurePage requiredData={["reservation_id", "payment_type"]} inputTypes={["number", "text"]} text={"Pay for specific reservation"} link={'http://localhost:8080/payments/reservations'}></GeneralProcedurePage>} />
                 <Route path="/procedures/payForParticipantReservations" element={<GeneralProcedurePage requiredData={["participant_id", "payment_type"]} inputTypes={["number", "text"]} text={"Pay for all participant reservations"} link={'http://localhost:8080/payments/participants/reservations'}></GeneralProcedurePage>} />
                 <Route path="/procedures/makeReservation" element={<GeneralProcedurePage requiredData={["course_id", "participant_id"]} inputTypes={["number", "number"]} text={"Make a reservation"} link={'http://localhost:8080/reservations'}></GeneralProcedurePage>} />
+                <Route path="/procedures/addCourseToCategory" element={<GeneralProcedurePage requiredData={["course_id", "category_id"]} inputTypes={["number", "number"]} text={"Add a category to a course"} link={'http://localhost:8080/categories/courses'}></GeneralProcedurePage>} />
+                <Route path="/procedures/cancelReservation" element={<GeneralProcedurePage requiredData={["reservation_id"]} inputTypes={["number"]} text={"Cancel a reservation"} link={'http://localhost:8080/reservations/cancel'}></GeneralProcedurePage>} />
                 
                 <Route path="/functions/availableCoursesBetweenDates" element={<GeneralFunctionPage requiredData={["startDate", "endDate"]} inputTypes={["date", "date"]} text={"Search for available courses between two dates"} link={'http://localhost:8080/courses/available/between'}></GeneralFunctionPage>} />
                 <Route path="/functions/availableCoursesBetweenDatesByCategory" element={<GeneralFunctionPage requiredData={["startDate", "endDate", "category_id"]} inputTypes={["date", "date", "number"]} text={"Search for available courses between two dates by category"} link={'http://localhost:8080/courses/categories/available/between'}></GeneralFunctionPage>} />

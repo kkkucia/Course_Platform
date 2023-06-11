@@ -5,6 +5,7 @@ const GeneralList = ({srcLink, text}) => {
   const [elements, setElements] = useState([])
 
   useEffect(() => {
+    setElements([])
     axios.get(srcLink)
       .then((res)=> {
         // console.log(res.data)
