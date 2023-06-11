@@ -12,7 +12,7 @@ const GeneralFunctionPage = (input) => {
     let data = {}
     for (let i=0; i < input.inputTypes.length; i++) {
       // console.log(event.target[input.requiredData[i]].value)
-      console.log(data)
+      // console.log(data)
       data = Object.assign({[input.requiredData[i]]: event.target[input.requiredData[i]].value}, data)
     }
     console.log(data)
@@ -36,6 +36,12 @@ const GeneralFunctionPage = (input) => {
     setResponseMessage([])
   }, [input.text])
   
+  const display = (el) => {
+    return Object.entries(el).map((record) => (
+      record.join(": ") + ", "
+    ))
+  }
+
   return (
     <div>
       <h2>{input.text}</h2>
@@ -50,11 +56,11 @@ const GeneralFunctionPage = (input) => {
       </form>
       <div id='response'>
         <ul>
-          {responseMessage.map((el, key) => (
-            <li key={key}>
-              {JSON.stringify(el)}
+          {responseMessage.map((el, idx) => (
+            <li className='record' key={idx}>
+              {display(el)}
             </li>
-          ))}
+        ))}
         </ul>
       </div>
     </div>

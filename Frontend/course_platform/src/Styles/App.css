@@ -5,3 +5,6 @@ nav {
   display: flex;
   justify-content: space-around;
 }
+.record {
+  margin-top:10px;
+}
