@@ -110,7 +110,7 @@ public class ReservationsController extends MainController {
     }
 
     @CrossOrigin
-    @PutMapping("/reservations")
+    @PostMapping("/reservations/cancel")
     public ResponseEntity<HttpStatus> cancelReservation(@RequestBody Map<String, Long> json){
         try {
             Query query = session.createSQLQuery(

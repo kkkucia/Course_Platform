@@ -16,6 +16,8 @@ const Navbar = () => {
               <li><Link to="/basic/categories">All Categories list</Link></li>
               <li><Link to="/basic/reservations">All Reservations list</Link></li>
               <li><Link to="/basic/participants">All Participants list</Link></li>
+              <li><Link to="/basic/mentors">All Mentors list</Link></li>
+              <li><Link to="/basic/logs">All Logs list</Link></li>
             </ul>
           </label>
           <label>
@@ -34,6 +36,8 @@ const Navbar = () => {
               <li><Link to="/procedures/payForReservation">Pay for reservation</Link></li>
               <li><Link to="/procedures/payForParticipantReservations">Pay for participant reservations</Link></li>
               <li><Link to="/procedures/makeReservation">Make a reservation</Link></li>
+              <li><Link to="/procedures/addCourseToCategory">Add a course to a category</Link></li>
+              <li><Link to="/procedures/cancelReservation">Cancel reservation</Link></li>
             </ul>
           </label>
           <label>
@@ -42,6 +46,12 @@ const Navbar = () => {
               <li><Link to="/functions/availableCoursesBetweenDates">Available courses between dates</Link></li>
               <li><Link to="/functions/availableCoursesBetweenDatesByCategory">Available courses between dates by category</Link></li>
               <li><Link to="/functions/getReservationsFromCourses">Reservations from course</Link></li>
+              <li><Link to="/functions/mentorsFromCourse">Mentors from course</Link></li>
+              <li><Link to="/functions/participantsFromCourse">Participants from course</Link></li>
+              <li><Link to="/functions/invoicesFromParticipant">Invoices from participant</Link></li>
+              <li><Link to="/functions/participantUnpaidSum">Unpaid sum for participant</Link></li>
+              <li><Link to="/functions/participantUnpaidReservations">Unpaid reservations for participant</Link></li>
+              <li><Link to="/functions/participantReservations">Reservations for participant</Link></li>
             </ul>
           </label>  
       </nav>

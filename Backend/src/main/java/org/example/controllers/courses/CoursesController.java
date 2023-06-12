@@ -142,7 +142,7 @@ public class CoursesController extends MainController {
     }
 
     @CrossOrigin
-    @PostMapping("/courses/mentors")
+    @PostMapping("/courses/mentors/add")
     public ResponseEntity<HttpStatus> addMentorToCourse(@RequestBody Map<String, Long> json) {
         try {
             Query query = session.createSQLQuery(
