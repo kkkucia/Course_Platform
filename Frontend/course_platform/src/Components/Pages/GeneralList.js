@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
+import "../../Styles/GeneralList.css"
 
 const GeneralList = ({srcLink, text, extendedLink, fkColumn, toShow}) => {
   const [elements, setElements] = useState([])

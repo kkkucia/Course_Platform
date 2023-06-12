@@ -1,0 +1,26 @@
+.box {
+    text-align: center;
+    margin: 0 auto;
+    background-image: url(../Resources/brain.jpg);
+    background-repeat: no-repeat;
+    background-position: bottom;
+    width: 80vw;
+    height: 460px;
+    padding: 130px 0px;
+    box-sizing: border-box;
+    margin-top: 50px;
+  }
+  
+  .box > div {
+    background-color: rgba(0, 0, 0, 0.692);
+    height: 200px;
+    border: 1px solid white;
+  }
+  
+  .info {
+    font-size: larger;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    padding: 30px 0px;
+  }
+  

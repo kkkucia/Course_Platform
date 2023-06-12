@@ -2,27 +2,32 @@ form {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-input {
+  }
+  
+  input {
     border: none;
     background-color: transparent;
     border-bottom: 2px solid darkblue;
-    outline:none;
-}
-input[type="submit"] {
+    outline: none;
+  }
+  
+  input[type="submit"] {
     width: 200px;
-    border:none;
+    border: none;
     padding: 10px;
     border-radius: 15px;
-    background-color: blueviolet;
+    background-color: rgba(73, 196, 249, 1);
     font-size: large;
     margin: 20px;
-    transition: 0.2s ease-in;
-}
-input[type="submit"]:hover {
-    background-color: rgb(166, 97, 231);
-}
-input[type="submit"]:active {
-    transition: 0.1s;
-    background-color: rgb(106, 14, 192);
-}
+    transition: background-color 0.2s ease-in;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  input[type="submit"]:hover {
+    background-color: darkblue;
+  }
+  
+  input[type="submit"]:active {
+    transition: background-color 0.1s;
+    background-color: rgba(0, 0, 139, 0.636);
+  }
