@@ -16,11 +16,11 @@ const GeneralFunctionPage = (input) => {
       data = Object.assign({[input.requiredData[i]]: event.target[input.requiredData[i]].value}, data)
     }
     console.log(data)
-    axios.post(input.link, data).then((res) => {
+    axios.get(input.link, {params:data}).then((res) => {
       if (res.status === 200) {
         // console.log(res.data)
         let tmp = res.data
-        if (!Array.isArray(res.data)) {
+        if (!Array.isArray(tmp)) {
           tmp = [res.data]
         }
         setResponseMessage(tmp)
@@ -37,9 +37,14 @@ const GeneralFunctionPage = (input) => {
   }, [input.text])
   
   const display = (el) => {
-    return Object.entries(el).map((record) => (
-      record.join(": ") + ", "
-    ))
+    // console.log(el)
+    if (typeof(el) == 'object') {
+      return Object.entries(el).map((record) => (
+        record.join(": ") + ", "
+      ))
+    } else {
+      return el
+    }
   }
 
   return (
