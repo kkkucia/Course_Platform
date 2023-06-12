@@ -36,11 +36,11 @@ public class CoursesController extends MainController {
 
     @CrossOrigin
     @GetMapping("/courses/categories/available/between")
-    public String getAvailableCoursesBetweenDatesByCategory(@RequestParam Map<String, String> inputMap) {
+    public String getAvailableCoursesBetweenDatesByCategory(@RequestParam Map<String, String> allParams) {
         Query query = session.createSQLQuery("SELECT * FROM f_available_courses_by_category_on_time(:startDate,:endDate, :category_id)")
-                .setParameter("startDate", Date.valueOf(inputMap.get("startDate")))
-                .setParameter("endDate", Date.valueOf(inputMap.get("endDate")))
-                .setParameter("category_id", Long.parseLong(inputMap.get("categoryId")));
+                .setParameter("startDate", Date.valueOf(allParams.get("startDate")))
+                .setParameter("endDate", Date.valueOf(allParams.get("endDate")))
+                .setParameter("category_id", Long.parseLong(allParams.get("categoryId")));
         return returnPreparedAvailableCourses(query);
     }
 
