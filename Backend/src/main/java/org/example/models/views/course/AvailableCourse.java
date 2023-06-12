@@ -4,14 +4,6 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 public class AvailableCourse {
-    //    c.ID,
-//       c.TITLE,
-//       ca.CATEGORY_NAME,
-//       c.START_DATE,
-//       c.END_DATE,
-//       c.AVAILABLE_PLACES,
-//       c.MAX_NO_PLACES,
-//       c.PRICE
     private final BigDecimal id;
     private String title;
     private String categoryName;
@@ -34,17 +26,17 @@ public class AvailableCourse {
         this.price = (BigDecimal) currObj[7];
     }
 
-//    @Override
-//    public String toString() {
-//        return "{" +
-//                "\"id\":" + id +
-//                ",\"title\":\"" + title + '\"' +
-//                ",\"categoryName\":\"" + categoryName + '\"' +
-//                ",\"startDate\":\"" + startDate + '\"' +
-//                ",\"endDate\":\"" + endDate + '\"' +
-//                ",\"availablePlaces\":" + availablePlaces +
-//                ",\"maxPlaces\":" + maxPlaces +
-//                ",\"price\":" + price +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        return "{" +
+                "\"id\":" + id +
+                ",\"title\":\"" + title + '\"' +
+                ",\"categoryName\":\"" + categoryName + '\"' +
+                ",\"startDate\":\"" + startDate + '\"' +
+                ",\"endDate\":\"" + endDate + '\"' +
+                ",\"availablePlaces\":" + availablePlaces +
+                ",\"maxPlaces\":" + maxPlaces +
+                ",\"price\":" + price +
+                '}';
+    }
 }

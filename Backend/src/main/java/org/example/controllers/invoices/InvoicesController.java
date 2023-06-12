@@ -3,14 +3,16 @@ package org.example.controllers.invoices;
 import org.example.controllers.MainController;
 import org.example.models.courses.Invoice;
 import org.example.models.views.invoice.InvoiceViewElement;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 public class InvoicesController extends MainController {
