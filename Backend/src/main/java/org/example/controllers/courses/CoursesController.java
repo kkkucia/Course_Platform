@@ -27,20 +27,20 @@ public class CoursesController extends MainController {
 
     @CrossOrigin
     @GetMapping("/courses/available/between")
-    public String getAvailableCoursesBetweenDates(@RequestBody Map<String, Date> dateMap) {
+    public String getAvailableCoursesBetweenDates(@RequestParam Map<String, Date> allParams) {
         Query query = session.createSQLQuery("SELECT * FROM F_AVAILABLE_COURSES_ON_TIME(:startDate,:endDate)")
-                .setParameter("startDate", dateMap.get("startDate"))
-                .setParameter("endDate", dateMap.get("endDate"));
+                .setParameter("startDate", allParams.get("startDate"))
+                .setParameter("endDate", allParams.get("endDate"));
         return returnPreparedAvailableCourses(query);
     }
 
     @CrossOrigin
     @GetMapping("/courses/categories/available/between")
-    public String getAvailableCoursesBetweenDatesByCategory(@RequestBody Map<String, String> inputMap) {
+    public String getAvailableCoursesBetweenDatesByCategory(@RequestParam Map<String, String> inputMap) {
         Query query = session.createSQLQuery("SELECT * FROM f_available_courses_by_category_on_time(:startDate,:endDate, :category_id)")
                 .setParameter("startDate", Date.valueOf(inputMap.get("startDate")))
                 .setParameter("endDate", Date.valueOf(inputMap.get("endDate")))
-                .setParameter("category_id", Integer.parseInt(inputMap.get("category_id")));
+                .setParameter("category_id", Long.parseLong(inputMap.get("categoryId")));
         return returnPreparedAvailableCourses(query);
     }
 
@@ -61,9 +61,9 @@ public class CoursesController extends MainController {
 
     @CrossOrigin
     @GetMapping("/courses/participants")
-    public String getParticipantsForCourse(@RequestBody Map<String, Integer> inputMap) {
-        Query query = session.createSQLQuery("SELECT * FROM f_participants_from_course(:course_id)")
-                .setParameter("course_id", inputMap.get("course_id"));
+    public String getParticipantsForCourse(@RequestParam("courseId") long courseId) {
+        Query query = session.createSQLQuery("SELECT * FROM f_participants_from_course(:courseId)")
+                .setParameter("courseId", courseId);
         List<Participant> participants = new ArrayList<>();
         Object[] currObj;
         Participant participant;
@@ -80,9 +80,9 @@ public class CoursesController extends MainController {
 
     @CrossOrigin
     @GetMapping("/courses/mentors")
-    public String getMentorsForCourse(@RequestBody Map<String, Integer> inputMap) {
-        Query query = session.createSQLQuery("SELECT * FROM f_mentors_from_course(:course_id)")
-                .setParameter("course_id", inputMap.get("course_id"));
+    public String getMentorsForCourse(@RequestParam long courseId) {
+        Query query = session.createSQLQuery("SELECT * FROM f_mentors_from_course(:courseId)")
+                .setParameter("courseId", courseId);
         List<Mentor> mentors = new ArrayList<>();
         Object[] currObj;
         Mentor mentor;
@@ -146,9 +146,9 @@ public class CoursesController extends MainController {
     public ResponseEntity<HttpStatus> addMentorToCourse(@RequestBody Map<String, Long> json) {
         try {
             Query query = session.createSQLQuery(
-                            "CALL add_mentor_to_course(:course_id, :mentor_id)")
-                    .setParameter("course_id", json.get("course_id"))
-                    .setParameter("mentor_id", json.get("mentor_id"));
+                            "CALL add_mentor_to_course(:courseId, :mentorId)")
+                    .setParameter("courseId", json.get("courseId"))
+                    .setParameter("mentorId", json.get("mentorId"));
             System.out.println(query.getResultList());
         } catch (PersistenceException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST);

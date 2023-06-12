@@ -26,10 +26,10 @@ public class UsersController extends MainController {
     }
 
     @CrossOrigin
-    @GetMapping("/participants/{participant_id}")
-    public Participant getParticipant(@PathVariable("participant_id") long participantId) {
-        Optional queryResults = session.createQuery("from Participant p where p.id = :participant_id")
-                .setParameter("participant_id", participantId)
+    @GetMapping("/participants/{participantId}")
+    public Participant getParticipant(@PathVariable("participantId") long participantId) {
+        Optional queryResults = session.createQuery("from Participant p where p.id = :participantId")
+                .setParameter("participantId", participantId)
                 .stream()
                 .findFirst();
         if (queryResults.isPresent()) {
@@ -48,10 +48,10 @@ public class UsersController extends MainController {
     }
 
     @CrossOrigin
-    @GetMapping("/mentors/{mentor_id}")
-    public Mentor getMentor(@PathVariable("mentor_id") long mentorId) {
-        Optional queryResults = session.createQuery("from Mentor m where m.id = :mentor_id")
-                .setParameter("mentor_id", mentorId)
+    @GetMapping("/mentors/{mentorId}")
+    public Mentor getMentor(@PathVariable("mentorId") long mentorId) {
+        Optional queryResults = session.createQuery("from Mentor m where m.id = :mentorId")
+                .setParameter("mentorId", mentorId)
                 .stream()
                 .findFirst();
         if (queryResults.isPresent()) {

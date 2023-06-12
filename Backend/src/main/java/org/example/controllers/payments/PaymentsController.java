@@ -19,9 +19,9 @@ public class PaymentsController extends MainController {
     public ResponseEntity<HttpStatus> payForReservation(@RequestBody Map<String, String> json) {
         try {
             Query query = session.createSQLQuery(
-                            "CALL PAY_FOR_RESERVATION(:reservation_id, :payment_type)")
-                    .setParameter("reservation_id", Long.parseLong(json.get("reservation_id")))
-                    .setParameter("payment_type", json.get("payment_type").toUpperCase());
+                            "CALL PAY_FOR_RESERVATION(:reservationId, :paymentType)")
+                    .setParameter("reservationId", Long.parseLong(json.get("reservationId")))
+                    .setParameter("paymentType", json.get("paymentType").toUpperCase());
             System.out.println(query.getResultList());
         } catch (PersistenceException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST);
@@ -35,9 +35,9 @@ public class PaymentsController extends MainController {
     public ResponseEntity<HttpStatus> payForAllParticipantReservations(@RequestBody Map<String, String> json) {
         try {
             Query query = session.createSQLQuery(
-                            "CALL PAY_FOR_ALL_UNPAID_RESERVATIONS(:participant_id, :payment_type)")
-                    .setParameter("participant_id", Long.parseLong(json.get("participant_id")))
-                    .setParameter("payment_type", json.get("payment_type").toUpperCase());
+                            "CALL PAY_FOR_ALL_UNPAID_RESERVATIONS(:participantId, :paymentType)")
+                    .setParameter("participantId", Long.parseLong(json.get("participantId")))
+                    .setParameter("paymentType", json.get("paymentType").toUpperCase());
             System.out.println(query.getResultList());
         } catch (PersistenceException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST);

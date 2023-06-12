@@ -35,9 +35,9 @@ public class ReservationsController extends MainController {
 
     @CrossOrigin
     @GetMapping("/reservations/courses")
-    public String getReservationsFromCourse(@RequestBody Map<String, Integer> input) {
-        Query query = session.createSQLQuery("SELECT * FROM f_reservations_from_course(:course_id)")
-                .setParameter("course_id", input.get("course_id"));
+    public String getReservationsFromCourse(@RequestParam long courseId) {
+        Query query = session.createSQLQuery("SELECT * FROM f_reservations_from_course(:courseId)")
+                .setParameter("courseId", courseId);
         return prepareQueryWithReservations(query);
     }
 
@@ -58,17 +58,17 @@ public class ReservationsController extends MainController {
 
     @CrossOrigin
     @GetMapping("/reservations/unpaid/users")
-    public String getUnpaidReservationsForUser(@RequestBody Map<String, Long> input) {
-        Query query = session.createSQLQuery("SELECT * FROM f_unpaid_reservations_for_participant(:user_id)")
-                .setParameter("user_id", input.get("user_id"));
+    public String getUnpaidReservationsForUser(@RequestParam long userId) {
+        Query query = session.createSQLQuery("SELECT * FROM f_unpaid_reservations_for_participant(:userId)")
+                .setParameter("userId", userId);
         return prepareQueryWithReservations(query);
     }
 
     @CrossOrigin
     @GetMapping("/reservations/participants")
-    public String getReservationsForParticipant(@RequestBody Map<String, Long> input) {
-        Query query = session.createSQLQuery("SELECT * FROM f_reservations_for_participant(:participant_id)")
-                .setParameter("participant_id", input.get("participant_id"));
+    public String getReservationsForParticipant(@RequestParam long participantId) {
+        Query query = session.createSQLQuery("SELECT * FROM f_reservations_for_participant(:participantId)")
+                .setParameter("participantId", participantId);
         return prepareQueryWithReservations(query);
     }
 
@@ -98,9 +98,9 @@ public class ReservationsController extends MainController {
     public ResponseEntity<HttpStatus> makeReservation(@RequestBody Map<String, Long> json) {
         try {
             Query query = session.createSQLQuery(
-                            "CALL make_reservation(:course_id, :participant_id)")
-                    .setParameter("course_id", json.get("course_id"))
-                    .setParameter("participant_id", json.get("participant_id"));
+                            "CALL make_reservation(:courseId, :participantId)")
+                    .setParameter("courseId", json.get("courseId"))
+                    .setParameter("participantId", json.get("participantId"));
             System.out.println(query.getResultList());
         } catch (PersistenceException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST);
@@ -114,8 +114,8 @@ public class ReservationsController extends MainController {
     public ResponseEntity<HttpStatus> cancelReservation(@RequestBody Map<String, Long> json){
         try {
             Query query = session.createSQLQuery(
-                            "CALL cancel_reservation(:reservation_id)")
-                    .setParameter("reservation_id", json.get("reservation_id"));
+                            "CALL cancel_reservation(:reservationId)")
+                    .setParameter("reservationId", json.get("reservationId"));
             System.out.println(query.getResultList());
         } catch (PersistenceException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST);

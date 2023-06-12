@@ -25,10 +25,10 @@ public class LogsController extends MainController {
     }
 
     @CrossOrigin
-    @GetMapping("/logs/{log_id}")
-    public LogTable getLog(@PathVariable("log_id") long logID) {
-        Optional queryResults = session.createQuery("from Log_table log where log.id = :log_id")
-                .setParameter("log_id", logID)
+    @GetMapping("/logs/{logId}")
+    public LogTable getLog(@PathVariable("logId") long logID) {
+        Optional queryResults = session.createQuery("from Log_table log where log.id = :logId")
+                .setParameter("logId", logID)
                 .stream()
                 .findFirst();
         if (queryResults.isPresent()) {
