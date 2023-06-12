@@ -9,6 +9,7 @@ form {
     background-color: transparent;
     border-bottom: 2px solid darkblue;
     outline: none;
+    margin-left: 5px;
   }
   
   input[type="submit"] {

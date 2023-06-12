@@ -17,24 +17,49 @@ const OneElementExtended = ({srcLink, ...props }) => {
         })
     }, [id, srcLink])
     
-    const parseData = (el) => {
-      if (typeof(el) == 'object') {
-        return JSON.stringify(el)
+    const parseData = (data, key) => {
+      if (typeof(data) == 'object') {
+        // return JSON.stringify(data)
+        if (Array.isArray(data)) {
+          if (data.length === 0) {
+            return "Empty"
+          }
+          return <ul>
+            {data.map((el, num) => (
+              <li key={key+"-"+num}>
+                <b>{num}: </b>
+                {parseData(el, key+"-"+num)}
+              </li>
+            ))}
+          </ul>
+          // return JSON.stringify(data)
+        } else {
+          return <ul>
+            {Object.entries(data).map((el, num) => (
+              <li key={key+"-"+num}>
+                <b>{el[0]}: </b>
+                {parseData(el[1], key+"-"+num)}
+              </li>
+            ))}
+          </ul>
+        }
       } else {
-        return el
+        return data
       }
     }
 
     return <>
         <div className='extendedCourse'>
-                {Object.entries(course).map((el, num) => (
-                    <p key={num}>
-                      <b>
-                        {el[0]}: 
-                      </b>
-                      {parseData(el[1])}
-                    </p>
-                ))}
+          <ul>
+            {Object.entries(course).map((el, num) => (
+              <li key={num}>
+                <b>
+                  {el[0]}: 
+                </b>
+                {parseData(el[1], num)}
+              </li>
+            ))}
+          </ul>
         </div>
     </>
 };

@@ -26,6 +26,8 @@ const GeneralList = ({srcLink, text, extendedLink, fkColumn, toShow}) => {
           let tmp = key.split('>')
           if (el[tmp[0]] !== undefined) {
             return tmp.join(".") + ": " + el[tmp[0]][tmp[1]] +", "
+          } else {
+            return ""
           }
         }else {
           return key + ": " + el[key]+", "
