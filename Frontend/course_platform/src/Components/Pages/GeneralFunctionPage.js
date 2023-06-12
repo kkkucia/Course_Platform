@@ -16,10 +16,14 @@ const GeneralFunctionPage = (input) => {
       data = Object.assign({[input.requiredData[i]]: event.target[input.requiredData[i]].value}, data)
     }
     console.log(data)
-    axios.get(input.link, {params:data}).then((res) => {
+    axios.post(input.link, data).then((res) => {
       if (res.status === 200) {
-        // setResponseMessage("Procedure run correctly with data "+JSON.stringify(data))
-        console.log(res.data)
+        // console.log(res.data)
+        let tmp = res.data
+        if (!Array.isArray(res.data)) {
+          tmp = [res.data]
+        }
+        setResponseMessage(tmp)
       }
     })
     .catch((err) => {
@@ -32,6 +36,12 @@ const GeneralFunctionPage = (input) => {
     setResponseMessage([])
   }, [input.text])
   
+  const display = (el) => {
+    return Object.entries(el).map((record) => (
+      record.join(": ") + ", "
+    ))
+  }
+
   return (
     <div>
       <h2>{input.text}</h2>
@@ -46,11 +56,11 @@ const GeneralFunctionPage = (input) => {
       </form>
       <div id='response'>
         <ul>
-          {responseMessage.map((el, key) => (
-            <li key={key}>
-              {JSON.stringify(el)}
+          {responseMessage.map((el, idx) => (
+            <li className='record' key={idx}>
+              {display(el)}
             </li>
-          ))}
+        ))}
         </ul>
       </div>
     </div>

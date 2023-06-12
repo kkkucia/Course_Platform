@@ -20,7 +20,7 @@ const GeneralProcedurePage = (input) => {
       }
     })
     .catch((err) => {
-      console.log(err.response.data)
+      console.log(err.response)
       setResponseMessage("Error with procedure using data "+JSON.stringify(data) +". Error:" + err.response.data.error)
     })
   }
