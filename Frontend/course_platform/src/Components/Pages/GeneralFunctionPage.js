@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios'
 import '../../Styles/Form.css'
+import '../../Styles/GeneralFunction.css'
 
 const GeneralFunctionPage = (input) => {
   // console.log(input)
@@ -15,7 +16,7 @@ const GeneralFunctionPage = (input) => {
       // console.log(data)
       data = Object.assign({[input.requiredData[i]]: event.target[input.requiredData[i]].value}, data)
     }
-    console.log(data)
+    // console.log(data)
     axios.get(input.link, {params:data}).then((res) => {
       if (res.status === 200) {
         // console.log(res.data)
@@ -36,14 +37,19 @@ const GeneralFunctionPage = (input) => {
     setResponseMessage([])
   }, [input.text])
   
-  const display = (el) => {
+  const display = (el, idx) => {
     // console.log(el)
     if (typeof(el) == 'object') {
-      return Object.entries(el).map((record) => (
-        record.join(": ") + ", "
-      ))
-    } else {
-      return el
+      return Object.entries(el).map((record, key) => {
+        return <>
+          <b key={idx + "-" +key}>
+            {record[0]}: 
+          </b> 
+          {record[1]}
+          {key%4 === 3 ? <br/> : ""}
+        </>
+    })} else {
+      return <b>{el}</b>
     }
   }
 
@@ -63,7 +69,7 @@ const GeneralFunctionPage = (input) => {
         <ul>
           {responseMessage.map((el, idx) => (
             <li className='record' key={idx}>
-              {display(el)}
+              {display(el, idx)}
             </li>
         ))}
         </ul>
