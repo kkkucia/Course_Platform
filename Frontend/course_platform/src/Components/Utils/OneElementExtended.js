@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import axios from 'axios';
 import { useParams } from 'react-router';
+import "../../Styles/OneElementExtended.css"
 
 const OneElementExtended = ({srcLink, ...props }) => {
     const {id} = useParams()

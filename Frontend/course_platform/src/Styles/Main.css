@@ -1,6 +1,8 @@
 h1, h2, h3, h4, h5, h6 {
     margin: 10px 0;
-}
-body {
+    font-family: 'Roboto', sans-serif;
+  }
+  
+  body {
     background-color: rgb(206, 235, 250);
-}
+  }
