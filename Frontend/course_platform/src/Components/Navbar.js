@@ -1,8 +1,6 @@
 import React from 'react';
-// import OneLink from './Utils/OneLink';
 import { Link } from "react-router-dom";
 import "../Styles/Navbar.css";
-
 const Navbar = () => {
 
   return (
