@@ -30,10 +30,10 @@ public class InvoicesController extends MainController {
     }
 
     @CrossOrigin
-    @PostMapping("/invoices/users")
-    public String getInvoicesForUser(@RequestBody Map<String, Integer> inputData) {
-        Query query = session.createSQLQuery("SELECT * FROM f_invoices_for_participant(:participant_id)")
-                .setParameter("participant_id", inputData.get("participant_id"));
+    @GetMapping("/invoices/users")
+    public String getInvoicesForUser(@RequestParam("participantId") long participantId) {
+        Query query = session.createSQLQuery("SELECT * FROM f_invoices_for_participant(:participantId)")
+                .setParameter("participantId", participantId);
         List<Invoice> invoices = new ArrayList<>();
         Object[] currObj;
         Invoice invoice;
@@ -49,10 +49,10 @@ public class InvoicesController extends MainController {
     }
 
     @CrossOrigin
-    @PostMapping("/invoices/unpaid/sum")
-    public BigDecimal getSumOfUnpaidInvoices(@RequestBody Map<String, Integer> inputData) {
-        Query query = session.createSQLQuery("SELECT f_amount_to_pay_for_participant(:participant_id) FROM DUAL")
-                .setParameter("participant_id", inputData.get("participant_id"));
+    @GetMapping("/invoices/unpaid/sum")
+    public BigDecimal getSumOfUnpaidInvoices(@RequestParam("participantId") long participantId) {
+        Query query = session.createSQLQuery("SELECT f_amount_to_pay_for_participant(:participantId) FROM DUAL")
+                .setParameter("participantId", participantId);
         BigDecimal finalSum = BigDecimal.ZERO;
         Object result = query.getSingleResult();
         if (result != null) {

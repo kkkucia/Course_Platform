@@ -29,9 +29,9 @@ public class CategoriesController extends MainController {
     public ResponseEntity<HttpStatus> addCourseToCategory(@RequestBody Map<String, Long> json) {
         try {
             Query query = session.createSQLQuery(
-                            "CALL add_course_to_category(:course_id, :category_id)")
-                    .setParameter("course_id", json.get("course_id"))
-                        .setParameter("category_id", json.get("category_id"));
+                            "CALL add_course_to_category(:courseId, :categoryId)")
+                    .setParameter("courseId", json.get("courseId"))
+                        .setParameter("categoryId", json.get("categoryId"));
             System.out.println(query.getResultList());
         } catch (PersistenceException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST);
