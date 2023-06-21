@@ -30,16 +30,16 @@ const Main = () => {
                 <Route path="/" element={<Home />} />
                 {/* Routes for basic paths - table records and extended info */}
                 <Route path="/basic/courses" element={<GeneralList srcLink={'http://localhost:8080/courses'} text={"List of all courses"} extendedLink={'/basic/courses/'} fkColumn={'id'} toShow={['title','price','availablePlaces']}/>} />
-                <Route path="/basic/courses/:id" element={<OneElementExtended srcLink={'http://localhost:8080/courses/id/'}></OneElementExtended>}/>
+                <Route path="/basic/courses/:id" element={<OneElementExtended srcLink={'http://localhost:8080/courses/id/'} text={"Course details"}></OneElementExtended>}/>
                 <Route path="/basic/categories" element={<GeneralList srcLink={'http://localhost:8080/categories'} text={"List of all categories"} />} />
                 <Route path="/basic/reservations" element={<GeneralList srcLink={'http://localhost:8080/reservations'} text={"List of all reservations"} extendedLink={'/basic/reservations/users/'} fkColumn={'participant>id'} toShow={['id', 'status', 'participant>id', 'course>title']}/>} />
-                <Route path="/basic/reservations/users/:id" element={<OneElementExtended srcLink={'http://localhost:8080/reservations/users/'}></OneElementExtended>} />
+                <Route path="/basic/reservations/users/:id" element={<OneElementExtended srcLink={'http://localhost:8080/reservations/users/'} text={"List of user's reservations"}></OneElementExtended>} />
                 <Route path="/basic/participants" element={<GeneralList srcLink={'http://localhost:8080/participants'} text={"List of all participants"} extendedLink={'/basic/participants/'} fkColumn={'id'} toShow={['id', 'firstName', 'lastName']} />} />
-                <Route path="/basic/participants/:id" element={<OneElementExtended srcLink={'http://localhost:8080/participants/'}></OneElementExtended>} />
+                <Route path="/basic/participants/:id" element={<OneElementExtended srcLink={'http://localhost:8080/participants/'} text={"Participant details"}></OneElementExtended>} />
                 <Route path="/basic/mentors" element={<GeneralList srcLink={'http://localhost:8080/mentors'} text={"List of all mentors"} extendedLink={'/basic/mentors/'} fkColumn={'id'} toShow={['id', 'firstName', 'lastName']}/>} />
-                <Route path="/basic/mentors/:id" element={<OneElementExtended srcLink={'http://localhost:8080/mentors/'}></OneElementExtended>} />
+                <Route path="/basic/mentors/:id" element={<OneElementExtended srcLink={'http://localhost:8080/mentors/'} text={"Mentor details"}></OneElementExtended>} />
                 <Route path="/basic/logs" element={<GeneralList srcLink={'http://localhost:8080/logs'} text={"List of all logs"} extendedLink={'/basic/logs/'} fkColumn={'id'} toShow={['id', 'status', 'reservation>id']}/>} />
-                <Route path="/basic/logs/:id" element={<OneElementExtended srcLink={'http://localhost:8080/logs/'}></OneElementExtended>} />
+                <Route path="/basic/logs/:id" element={<OneElementExtended srcLink={'http://localhost:8080/logs/'} text={"Log details"}></OneElementExtended>} />
 
                 {/* Routes for views */}
                 <Route path="/views/availableCourses" element={<GeneralList srcLink={'http://localhost:8080/courses/available'} text={"List of available courses"} toShow={['title', 'categoryName', 'availablePlaces', 'maxPlaces', 'price']}/>} />

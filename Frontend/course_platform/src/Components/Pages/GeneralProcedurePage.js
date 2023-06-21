@@ -15,7 +15,6 @@ const GeneralProcedurePage = (input) => {
     for (let i = 0; i < input.inputTypes.length; i++) {
       data = Object.assign({ [input.requiredData[i]]: event.target[input.requiredData[i]].value }, data)
     }
-    console.log(data)
     axios.post(input.srcLink, data, { headers: { "Content-Type": "application/json" } }).then((res) => {
       if (res.status === 200) {
         setResponseMessage("Procedure run correctly with data " + JSON.stringify(data))

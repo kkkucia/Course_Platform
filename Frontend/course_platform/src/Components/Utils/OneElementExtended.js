@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useParams } from 'react-router';
 import "../../Styles/OneElementExtended.css"
 
-const OneElementExtended = ({ srcLink, ...props }) => {
+const OneElementExtended = ({ srcLink, text, ...props }) => {
   const { id } = useParams()
   const [course, setCourse] = useState([])
 
@@ -52,6 +52,7 @@ const OneElementExtended = ({ srcLink, ...props }) => {
 
   return <>
     <div className='extendedCourse'>
+      <h3>{text}</h3>
       <ul>
         {Object.entries(course).map((el, num) => (
           <li key={num}>
