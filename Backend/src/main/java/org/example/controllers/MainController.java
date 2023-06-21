@@ -5,7 +5,7 @@ import org.example.connection.DBConnection;
 import org.hibernate.Session;
 
 public abstract class MainController {
-    protected final Session session;
+    protected Session session;
     protected final Gson gson;
 
     public MainController() {

@@ -1,5 +1,6 @@
 package org.example.controllers.courses;
 
+import org.example.connection.DBConnection;
 import org.example.controllers.MainController;
 import org.example.models.courses.Course;
 import org.example.models.users.Mentor;
@@ -138,6 +139,7 @@ public class CoursesController extends MainController {
         Transaction tx = session.beginTransaction();
         session.save(course);
         tx.commit();
+        session = DBConnection.getSession();
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -154,6 +156,7 @@ public class CoursesController extends MainController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST);
         } catch (NegativeArraySizeException ignored) {
         }
+        session = DBConnection.getSession();
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

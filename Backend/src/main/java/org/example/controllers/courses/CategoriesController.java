@@ -1,5 +1,6 @@
 package org.example.controllers.courses;
 
+import org.example.connection.DBConnection;
 import org.example.controllers.MainController;
 import org.example.models.courses.Category;
 import org.springframework.http.HttpStatus;
@@ -37,6 +38,7 @@ public class CategoriesController extends MainController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST);
         } catch (NegativeArraySizeException ignored) {
         }
+        session = DBConnection.getSession();
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

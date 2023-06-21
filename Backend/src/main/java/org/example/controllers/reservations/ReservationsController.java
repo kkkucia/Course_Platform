@@ -1,5 +1,6 @@
 package org.example.controllers.reservations;
 
+import org.example.connection.DBConnection;
 import org.example.controllers.MainController;
 import org.example.models.courses.Reservation;
 import org.example.models.views.reservation.CanceledReservation;
@@ -106,6 +107,7 @@ public class ReservationsController extends MainController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST);
         } catch (NegativeArraySizeException ignored) {
         }
+        session = DBConnection.getSession();
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -121,6 +123,7 @@ public class ReservationsController extends MainController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST);
         } catch (NegativeArraySizeException ignored) {
         }
+        session = DBConnection.getSession();
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

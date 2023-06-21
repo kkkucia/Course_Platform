@@ -1,5 +1,6 @@
 package org.example.controllers.payments;
 
+import org.example.connection.DBConnection;
 import org.example.controllers.MainController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ public class PaymentsController extends MainController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST);
         } catch (NegativeArraySizeException ignored) {
         }
+        session = DBConnection.getSession();
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -43,6 +45,7 @@ public class PaymentsController extends MainController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST);
         } catch (NegativeArraySizeException ignored) {
         }
+        session = DBConnection.getSession();
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }
