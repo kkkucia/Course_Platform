@@ -14,10 +14,14 @@ const OneElementExtended = ({ srcLink, ...props }) => {
       })
       .catch((res) => {
         console.log("Error caught while fetching extended data for record: " + res)
+        setCourse({})
       })
   }, [id, srcLink])
 
   const displayData = (data, key) => {
+    if (data === null) {
+      return "Not defined"
+    }
     if (typeof (data) == 'object') {
       if (Array.isArray(data)) {
         if (data.length === 0) {

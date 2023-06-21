@@ -13,7 +13,6 @@ const GeneralProcedurePage = (input) => {
     event.preventDefault()
     let data = {}
     for (let i = 0; i < input.inputTypes.length; i++) {
-      console.log(event.target[input.requiredData[i]].value)
       data = Object.assign({ [input.requiredData[i]]: event.target[input.requiredData[i]].value }, data)
     }
     console.log(data)
